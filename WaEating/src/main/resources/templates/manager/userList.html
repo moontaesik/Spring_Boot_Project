@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	   <link rel="stylesheet" type="text/css" th:href="@{/css/restaurant.css}" />
+
+</head>
+
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+	#faq-create-form {
+		width: 80%;
+		margin: 3% auto;
+	}
+
+	#faq-create-table {
+		width: 100%;
+	}
+
+	#button-wrapper {
+		display: flex;
+		justify-content: right;
+		margin: 2% 2% 0 0;
+	}
+
+	td {
+		padding: 2%;
+		border-bottom: solid 1px lightgray;
+	}
+
+	#h4-FAQ-title {
+		font-weight: 900;
+	}
+
+	#btn-confirm {
+		border-radius: 3px;
+		width: 10%;
+		padding: 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+	}
+
+	#btn-cancel {
+
+		border-radius: 3px;
+		width: 10%;
+		padding: 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #ffffff;
+		margin: 0 1%;
+	}
+
+	#listContainer {
+		margin: 0 auto;
+	}
+
+	.btn-light:hover {
+		border: 1px solid #d9d1dd;
+	}
+
+	#search-wrap {
+		margin-top: 3%;
+		width: 80%;
+		margin: 3% auto 1%;
+		position: relative;
+		border: 1px solid #DDDDDD;
+		border-radius: 4px;
+		background: #F8F8F8;
+		padding: 2%;
+		clear: both;
+		overflow: auto;
+		height: 102px;
+	}
+
+	#notice-search-button {
+		border-radius: 3px;
+		width: 10%;
+		padding: 1.2% 0.7% 0.7% 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		float: left;
+		margin-right: 2%;
+	}
+
+	input[type="text"] {
+		width: 60%;
+		margin-right: 2%;
+		border: 1px solid #DDD;
+		padding: 0.7%;
+		border-radius: 5px;
+		float: left;
+	}
+
+	select {
+		float: left;
+		padding: 0.75%;
+		border-radius: 3px;
+		margin-right: 2%;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_managerpage:: WaEating_sider_managerpage">
+
+			</ul>
+		</div>
+		<div class="test">
+			
+				<table style="">
+					<tr><th>id</th><th>name</th><th>phone</th><th>userId</th><th>예약회수</th><th>-</th><tr>
+				</table>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+   
+   <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Reservation foodTable</title>
+   
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" th:href="@{/css/side.css}">
+   <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+   <script type="text/javascript" th:src="@{/js/common.js}"></script>
+   
+   <script type="text/javascript">
+      class Region {
+         constructor(id, name) {
+            this.id = id;
+            this.name = name;
+         }
+         equals(regionId) {
+            return this.id == regionId;
+         }
+      }
+     
+      $(document).ready(function () {
+       	let interestRegion = [];
+       	$.each($('.selected-region'),function(){
+			   
+			   interestRegion.push(new Region($(this).attr("regionid"), $(this).text()));
+		   })
+       	
+       	console.log(interestRegion);
+     $('body').on('click', '.selected-region', function () {
+			  id= $(this).attr("regionid");
+			  interestRegion.forEach((element, index) => {
+                     if (element.equals($(this).attr("regionid"))) {
+                        interestRegion.splice(index, 1); 
+                     }
+                  })
+			  
+			  $(this).remove();
+		
+			  
+			  $.each($('.clicked-dong'),function(){
+				 
+				  if($(this).attr("regionid")== id){
+					  
+					  $(this).removeClass('clicked-dong');
+				  }
+				  
+			  })
+
+		  })
+      
+         $("#si, #gun, #dong").on("wheel", function (e) {
+            e.preventDefault();
+            this.scrollLeft += e.originalEvent.deltaY;
+         });
+
+         $('.region-si').click(function () {
+            parentId = $(this).attr("regionid");
+            parentName = $(this).text();
+            $('#dong').html("");
+
+            $('.clicked-si').removeClass('clicked-si');
+            $(this).addClass('clicked-si');
+
+            url = "[[@{/request/area}]]";
+            params = {areaValue: parentId};
+
+            $.get(url, params, function (response) {
+
+               $('#gun').html("");
+
+               response.forEach(gun => {
+                
+                  var newDiv = $("<div>").addClass("category-circle region-gun").attr("regionid", gun.id).text(gun.name);
+                  $("#gun").append(newDiv);
+               })
+            });
+         })
+
+         $('body').on('click', '.region-gun', function () {
+            parentId = $(this).attr("regionid");
+            parentName = $(this).text();
+            console.log("id : " + parentId);
+            console.log("name : " + parentName);
+
+            $('.clicked-gun').removeClass('clicked-gun');
+            $(this).addClass('clicked-gun');
+
+            url = "[[@{/request/area}]]";
+            params = {areaValue: parentId};
+
+            $.get(url, params, function (response) {
+
+               $('#dong').html("");
+
+               response.forEach(dong => {
+                  console.log(dong);
+                  let exist = false;
+                  interestRegion.forEach(element => {
+                     if (element.equals(dong.id)) {
+                        var newDiv = $("<div>").addClass("category-circle region-dong clicked-dong").attr("regionid", dong.id).text(dong.name);
+                        $("#dong").append(newDiv);
+                        exist = true;
+                     }
+                  })
+                  if (!exist) {
+                     var newDiv = $("<div>").addClass("category-circle region-dong").attr("regionid", dong.id).text(dong.name);
+                     $("#dong").append(newDiv);
+                  }
+
+               })
+            });
+         });
+
+         $('body').on('click', '.region-dong', function () {
+            id = $(this).attr("regionid");
+            name = $(this).text();
+            console.log(interestRegion);
+            if ($(this).hasClass('clicked-dong')) {
+
+               $(this).removeClass('clicked-dong');
+               interestRegion = interestRegion.filter(element => !element.equals(id))
+               $("#selected-region-" + id).remove();
+               return;
+            }
+
+            if (interestRegion.length >= 5) {
+               console.log('5개가 이미 선택되었습니다.')
+               return;
+            }
+
+            interestRegion.push(new Region(id, name));
+            $(this).addClass('clicked-dong');
+            var selectedDiv = $("<div>").addClass("category-circle selected-region").attr("regionid", id).text(name).attr("id", "selected-region-" + id);
+            $("#my-select-region-div").append(selectedDiv);
+         });
+
+         $('#confirm-btn').click(function () {
+            if (interestRegion.length < 1) {
+               return;
+            }
+            if ($('.clicked-category').length < 1) {
+               return;
+            }
+
+            let categoryIds = []
+            let areaIds = []
+            
+            $('.clicked-category').each(function () {
+               categoryIds.push(Number($(this).attr("categoryid")));
+            })
+
+
+            interestRegion.forEach(element => {
+               areaIds.push(Number(element.id));
+            })
+            
+            url = "[[@{/mypage/save/interest}]]";
+            csrfValue = $("input[name='_csrf']").val();
+            $.ajax({
+               url: url,
+               type: "POST",
+               contentType: "application/json",
+               data: JSON.stringify({
+                  "categoryIds" : categoryIds,
+                  "areaIds": areaIds,
+                  "id":Number("[[${id}]]")
+               }),
+               beforeSend: function (xhr) {
+                  xhr.setRequestHeader("X-CSRF-Token", csrfValue);
+               },
+               success: function (response) {
+
+                  if(response=="Good"){
+                     
+                     window.location.href="[[@{/mypage}]]"
+                  }
+               }
+            });
+         })
+		
+         $('.category-img-div').click(function () {
+            if ($(this).hasClass('clicked-category')) {
+               $(this).removeClass('clicked-category');
+               return;
+            }
+            if ($('.clicked-category').length >= 2) {
+               return;
+            }
+            $(this).addClass('clicked-category');
+         })
+      });
+</script>
+</head>
+<style>
+   .error {
+      color: red;
+      margin-top: 5px;
+   }
+
+   #select-form-div {
+
+      width: 35%;
+      margin: 2% auto;
+      background-color: #d3d3d32e;
+      height: 680px;
+      border-radius: 25px;
+      padding: 3%;
+   }
+
+   #head-title {
+
+      width: 80%;
+      text-align: center;
+      margin: 0 auto 20px auto;
+   }
+
+   #head-title2 {
+      width: 80%;
+      text-align: center;
+      margin: 20px auto 20px auto;
+   }
+
+   .category-circle {
+      justify-content: center;
+      width: 20%;
+      float: left;
+      background-color: white;
+      margin: 2.5%;
+      aspect-ratio: 1;
+      display: flex;
+      border-radius: 10px;
+      align-items: center;
+
+   }
+
+   .category-img-div {
+      background-size: 100% 100%;
+      color: white;
+      font-weight: 700;
+      font-size: 25px;
+
+   }
+
+   .region-interest-div {
+      overflow-x: scroll;
+      height: 15%;
+      display: flex;
+   }
+
+   .region-si {
+      aspect-ratio: 2/1;
+   }
+
+   .region-gun {
+      aspect-ratio: 2/1;
+   }
+
+   .region-dong {
+      aspect-ratio: 2/1;
+   }
+
+   #category-interest-div {
+      clear: both;
+
+      height: 20%;
+   }
+
+   .region-interest-div::-webkit-scrollbar {
+      display: none;
+   }
+
+   .clicked-si {
+      background-color: lightblue;
+   }
+
+   .clicked-gun {
+      background-color: lightpink;
+   }
+
+   .clicked-dong {
+      background-color: lightyellow;
+   }
+
+   .region-si-total {
+      aspect-ratio: 2/1;
+   }
+
+   .region-gun-total {
+      aspect-ratio: 2/1;
+   }
+
+   #my-select-region-div {
+      overflow-x: scroll;
+      height: 15%;
+      display: flex;
+      border-bottom: solid 2px black;
+   }
+
+   #my-select-region-div::-webkit-scrollbar {
+      display: none;
+   }
+
+   .selected-region {
+      width: 15%;
+      font-size: 12px;
+      background-color: lightyellow;
+
+   }
+
+   #button-wrap {
+      border-top: solid 2px black;
+      text-align: center;
+      padding: 2%;
+   }
+
+   .regi-btn {
+      margin: 0 3%;
+   }
+
+   .clicked-category {
+      border: solid 4px rgb(219, 2, 7);
+   }
+</style>
+
+<body>
+
+   <div th:replace="fragments/header:: WaEating_header"></div>
+
+   <!--side-->
+   <div class="sideWrapper">
+      <div class="sidebar">
+         <ul th:replace="fragments/side_mypage:: WaEating_sider_mypage">
+
+         	</ul>
+      </div>
+      <div id="select-form-div">
+         <div id="head-title"><b>[[${name}]]님</b> 관심 카테고리를 선택해 주세요( 1 ~ 2개 )</div>
+         <div id="category-interest-div">
+            <div class="category-circle category-img-div" th:each="category,index:${categories}"
+               th:categoryid="${category.id}"
+               th:classappend="${myCategory.contains(category) ? 'clicked-category' : ''}"
+               th:style="|background-image: url('@{/img/category/}${index.index}.jpg')|">[[${category.name}]]</div>
+         </div>
+         <div id="head-title2"><b>[[${name}]]님</b> 관심 지역을 선택해 주세요( 1 ~ 5개 )</div>
+         <div id="my-select-region-div">
+			 <div th:each="marea:${myArea}"class="category-circle selected-region" 
+			 th:regionid="${marea.id}" th:id="${'selected-region-'+marea.id}" th:text="${marea.name}"></div>
+			 
+		 </div>
+         <div id="si" class="region-interest-div">
+            <div class="category-circle region-si" th:each="si:${parentAreas}" th:regionid="${si.id}">[[${si.name}]]
+            </div>
+   
+         </div>
+         <div id="gun" class="region-interest-div"></div>
+         <div id="dong" class="region-interest-div"></div>
+         <div id="button-wrap">
+            <button class="btn regi-btn">건너뛰기</button><button id="confirm-btn" class="btn regi-btn">확인</button>
+         </div>
+      </div>
+      <form th:action="@{/}" method="post"></form>
+   </div>
+   <div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+
+</head>
+
+<style>
+	.sideWrapper .wrapper {
+		position: absolute;
+		margin-left: 40%;
+		width: 30%;
+		background: #fffef9;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_managerpage:: WaEating_sider_managerpage">
+			</ul>
+		</div>
+		<div class="wrapper">
+			<div class="title">
+				점주회원가입dd
+			</div>
+			<form th:action="@{/manager/add/owner/{id}(id=${restaurantId})}" th:object="${owner}" method="post"
+				onsubmit="return checkNameUnique(this)">
+				<input type="hidden" th:field="*{id}" />
+				<input type="hidden" name="id" th:value="${restaurantId}" />
+				<input type="hidden" th:if="${#lists.isEmpty(owner.userId)}" th:field="*{userId}">
+				<input type="hidden" th:if="${#lists.isEmpty(owner.password)}" th:field="*{password}">
+				<div class="field">
+					<input type="text" th:field="*{name}" required>
+					<label>이름</label>
+				</div>
+				<div class="field">
+					<input type="text" th:field="*{phone}" required>
+					<label>전화번호</label>
+				</div>
+				<div class="field" th:if="${#lists.isEmpty(owner.userId)}" style="display: block;">
+					<input type="text" th:field="*{userId}" required>
+					<label>UserID</label>
+				</div>
+				<div class="field" th:if="${not #lists.isEmpty(owner.userId)}" style="display: none;">
+					<input type="text" th:field="*{userId}" required>
+					<label>UserID</label>
+				</div>
+				<div class="field" th:if="${#lists.isEmpty(owner.password)}" style="display: block;">
+					<input type="password" th:field="*{password}" required>
+					<label>비밀번호</label>
+				</div>
+				<div class="field" th:if="${not #lists.isEmpty(owner.password)}" style="display: none;">
+					<input type="password" th:field="*{password}">
+					<label>비밀번호</label>
+				</div>
+				<div class="field" th:if="${#lists.isEmpty(owner.password)}" style="display: block;">
+					<input type="submit" value="회원가입">
+				</div>
+				<div class="field" th:if="${not #lists.isEmpty(owner.password)}" style="display: none;">
+					<input type="submit" value="회원가입">
+				</div>
+				<div class="field" th:if="${#lists.isEmpty(owner.password)}" style="display: none;">
+					<input type="submit" value="수정하기">
+				</div>
+				<div class="field" th:if="${not #lists.isEmpty(owner.password)}"style="display: block;">
+					<input type="submit" value="수정하기">
+				</div>
+				<div class="content">
+					<div class="pass-link">
+						<a th:href="@{/manager}">관리자홈으로</a>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="modal fade text-center" id="modalDialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle">Warning</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<span id="modalBody"></span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+
+
+	<script type="text/javascript">
+		function checkNameUnique(form) {
+			url = "[[@{/member/check/condition}]]";
+
+			userId = $("#id").val();
+			memberUserId = $("#userId").val();
+			phone = $("#phone").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			params = {id: userId, userId: memberUserId, phone: phone, _csrf: csrfValue};
+
+			$.post(url, params, function (response) {
+				if (response == "OK") {
+					form.submit();
+				} else if (response == "IdDuplicated") {
+					showModalDialog("Warning", "User ID : " + memberUserId + " is alread exist!!");
+				} else if (response == "PhoneDuplicated") {
+					showModalDialog("Warning", "Phone : " + phone + " is alread exist!!");
+				} else if (response == "Duplicated") {
+					showModalDialog("Warning", "User ID : " + memberUserId + " and Phone : " + phone + " is alread exist!!");
+				} else {
+					showModalDialog("Error", "Unknown response from server");
+				}
+			}).fail(function () {
+				showModalDialog("Error", "Could not connect to the server");
+			});
+			return false;
+		}
+
+		function showModalDialog(title, message) {
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialog").modal();
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="WaEating_head">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.3.js"
+		integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/searchHeader.css}" />
+</head>
+<body>
+	<div id="headerContainer" th:fragment="WaEating_header">
+		<div id="header">
+			<div class="WaEating_headName" th:onclick="|window.location='@{/}'|">
+				<!--<span class="fab fa-github fa-3x"></span>-->
+				<img id="logo" th:src="@{/img/mainBanner/logo2.png}">
+				<h1>WaEating</h1>
+			</div>
+			<div id="headerUl">
+				<div class="headerLi" sec:authorize="isAnonymous()">
+					<!--<span class="fas fa-sign-out" id="headIcon"></span>-->
+					<a class="head-a" th:href="@{/login}"> 로그인 </a>
+				</div>
+				<div class="headerLi" sec:authorize="isAnonymous()">
+					<!--<span class="fas fa-lock" id="headIcon"></span>-->
+					<a class="head-a" th:href="@{/member/join}"> 회원가입 </a>
+				</div>
+				<div class="headerLi" sec:authorize="isAuthenticated()">
+					<!--<span class="fas fa-sign-out" id="headIcon"></span>-->
+					<a class="head-a" th:href="@{/login}"> 로그아웃 </a>
+				</div>
+				<div class="headerLi" sec:authorize="isAuthenticated()">
+					<!--<span class="fas fa-lock" id="headIcon"></span>-->
+					<a class="head-a" th:href="@{/mypage}"> 마이페이지 </a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>

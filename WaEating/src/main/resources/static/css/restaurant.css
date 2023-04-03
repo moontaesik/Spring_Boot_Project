@@ -1,0 +1,470 @@
+#restaurnantHtml,
+#restaurnantBody {
+	height: 100%;
+	clear: both;
+}
+
+#headerImg {
+	background-color: blue;
+	color: white;
+	height: 50%;
+}
+
+#resInfo {
+	border: 2px solid #d9d1dd;
+	min-width: 62%;
+	max-width: 62%;
+	margin-left: 5%;
+	min-height: 100%;
+	float: left;
+	background-color: white;
+	position: relative;
+	
+	border-radius: 20px;
+	padding: 2%;
+	margin-top: -4%;
+}
+
+#reserInfo {
+
+
+	float: left;
+
+	background-color: sandybrown;
+
+}
+
+.a {
+	border-radius: 2%;
+	background-color: white;
+}
+
+#infoUp {
+	border: 2px solid #d9d1dd;
+	width: 25%;
+	position: relative;
+	border-radius: 20px;
+	margin-right: 5%;
+	float: right;
+	padding: 2%;
+	margin-top: -4%;
+}
+
+#infoDown {
+	border: 2px solid #d9d1dd;
+	width: 25%;
+	position: relative;
+	border-radius: 20px;
+	margin-right: 5%;
+	float: right;
+	padding: 2%;
+	margin-top: 5%;
+}
+
+#footer {
+	clear: both;
+	height: 5%;
+}
+
+#mainContent {
+	margin-bottom: 6%;
+
+}
+
+.restaurant-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.book-btn {
+	background-color:  #fffcf7;
+	border: 2px solid gainsboro;
+}
+
+.my-overview {
+	float: left;
+	width: 12%;
+	font-size: 70%;
+	text-align: center;
+}
+
+.menu2TotalRating {
+	height: 105px;
+	width: 105px;
+}
+
+#overview-name {
+	width: 60%;
+	float: left;
+}
+
+#home {
+	clear: both;
+}
+
+#overview-info {
+	clear: both;
+	font-size: 90%;
+}
+
+.overview-header {
+	margin-top: 5%;
+}
+
+.menu-card {
+	width: 23%;
+	margin: 5% 1%;
+	float: left;
+
+}
+
+.menu-img {
+	aspect-ratio: 3 / 2;
+}
+
+.menu-card-name {
+	text-align: center;
+	margin-top: 5%;
+}
+
+.overview-review {
+	width: 95%;
+	margin: 3% auto;
+	background-color: white;
+	border: 1px solid;
+	padding: 2%;
+}
+
+.category-menu {
+	clear: both;
+}
+
+.review-list {
+	margin-top: 3%;
+	border: 1px solid black;
+}
+
+.calendar-week {
+	clear: both;
+}
+
+.weekday {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	float: left;
+	width: 14%;
+	aspect-ratio: 1;
+}
+
+.calendar-header {
+	display: flex;
+	clear: both;
+}
+
+.calendar-day {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	float: left;
+	width: 14%;
+	aspect-ratio: 1;
+}
+
+.calendar {
+	text-align: center;
+}
+
+.calendar-enabled {
+	font-weight: bold;
+}
+
+.calendar-disabled {
+	color: antiquewhite;
+}
+
+.calendar-red {
+	color: red;
+}
+
+.calendar-blue {
+	color: blue;
+}
+
+.avail-time {
+	width: 23%;
+	float: left;
+	text-align: center;
+	border: 1px solid #d9d1dd;
+	margin: 1% 1%;
+	box-sizing: border-box;
+}
+
+.book-btn {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	margin: 0 auto;
+	padding: 2% 0;
+}
+
+#person-value {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.select-day {
+	border: 1px solid red;
+}
+
+hr {
+	clear: both;
+}
+
+#map {
+	width: 100%;
+	aspect-ratio: 1;
+
+}
+
+.overview-review-content {
+	margin-top: 2%;
+}
+
+.disable-time {
+	background-color: gray;
+}
+
+.select-time {
+	border: 1px solid red;
+
+}
+
+.no-review {
+	text-align: center;
+	margin: 10% 0;
+}
+
+nav {
+	align-items: center;
+	display: flex;
+}
+
+ul {
+	margin: 5% auto 3% auto;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.sectionMain {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.full-boxer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+}
+
+.box-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+
+.comment-box {
+	/*width: 500px; */
+	width: 100%;
+	background: white;
+	padding: 20px;
+	margin: 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.Profile {
+	display: flex;
+	align-items: center;
+}
+
+.profile-image {
+	width: 70px;
+	height: 70px;
+	box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.profile-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.Name {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.Name strong {
+	color: black;
+	font-size: 18px;
+}
+
+.Name span {
+	color: gray;
+	margin-top: 2px;
+}
+
+.Name a {
+	float: left;
+}
+
+.comment p {
+	color: black;
+}
+
+
+.rating .rating-span img {
+	width: 25px;
+	height: 25px;
+	align-items: center;
+	padding: 2px;
+}
+
+.rating img {
+	width: 25px;
+	height: 25px;
+	align-items: center;
+	padding: 2px;
+}
+
+#menu2Container {
+	display: flex;
+	/* justify-content: space-between; */
+	font-size: large;
+	font-weight: 500;
+	padding: 60px 120px;
+	align-items: center;
+	gap: 90px;
+	justify-content: center;
+}
+
+.total-score-header {
+	font-size: 50px;
+	font-weight: 800;
+}
+
+.review-score-table tbody tr td {
+	padding: 10px 15px;
+
+}
+
+.review-score-td {
+	font-weight: 800;
+}
+
+.menu2Rating {
+	width: 35px;
+	height: 35px;
+	align-items: center;
+	padding: 2px;
+	margin-bottom: 5px;
+}
+
+.menu22Rating {
+	width: 175PX;
+	height: 175PXpx;
+	align-items: center;
+	padding: 2px;
+	margin-bottom: 5px;
+}
+
+#overviewContainer {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	font-size: large;
+	font-weight: 500;
+}
+
+.no-data {
+	padding: 45px 15px 15px 0;
+}
+	.btn-light{
+    background-color: rgb(254 251 251);
+    border-color: #f8f9fa;
+    border: 2px solid #d9d1dd;
+}
+
+	.btn-light:hover{
+    box-shadow: 
+    inset 0 0 0 100px rgb(237, 231, 231);
+    opacity: 1;transform: scale(1);
+}
+/*페이징*/
+
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item.active .page-link{
+		border: 2px solid #574343;
+		background: white;
+		color: black;
+	}
+	.page-link:hover {
+		color: rgb(90, 85, 78);
+		}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+
+	
+	

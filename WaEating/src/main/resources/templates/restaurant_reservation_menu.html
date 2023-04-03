@@ -1,0 +1,365 @@
+	<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header::WaEating_head" />
+
+<head>
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>첫 페이지</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/restaurantMenuForm.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.3.js"
+		integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script>
+		function moveCategory(id) {
+			console.log(id);
+			target = $('#category' + id);
+		target[0].scrollIntoView({block: "center"});
+
+
+
+		}
+		let menuDiv;
+		class OrderData {
+			constructor(order) {
+				this.id = order.id;
+				this.quantity = order.quantity;
+			}
+		}
+		class Order {
+
+			constructor(menuId, price) {
+				this.id = menuId;
+				this.quantity = 1;
+				this.price = price;
+			}
+
+
+			compareMenuId(value) {
+				return this.id === value;
+			}
+
+			plus() {
+				this.quantity++;
+			}
+			minus() {
+				if (this.quantity == 1) return false;
+				this.quantity--;
+				return true;
+			}
+			totalPrice() {
+				console.log(this.quantity * this.price);
+				return this.quantity * this.price;
+			}
+			totalPriceForm() {
+				return (this.quantity * this.price).toLocaleString() + ' 원';
+			}
+
+
+
+		}
+
+
+		$(document).ready(function () {
+
+			
+			const orderlist = [];
+			
+			 $('.order-row').toArray().forEach(function(element){
+				 id = $(element).attr("id").replace("menu","");
+
+				 formatPrice = $(element).find('#menu'+id+'-price').text();
+				 quantity = $(element).find('#menu'+id+'-quantity').text();
+				 myOrder = new Order(id, prcieToNumber(formatPrice)/quantity);
+
+				 for(let i =0; i < quantity-1;i++){
+					 myOrder.plus();
+				 }
+				 orderlist.push(myOrder);
+			 })
+			 
+			 if(orderlist){
+				 orderTotalPrice();	
+			 }
+			 
+
+
+
+			function calPrice(prevPrice, presentQunatity) {
+
+				newPrice = prevPrice.replaceAll(",", "").replace("원", "").replace(" ", "");
+				presentPrice = Number(newPrice) / (presentQunatity - 1) * presentQunatity;
+				return presentPrice.toLocaleString() + ' 원';
+			}
+
+			function prcieToNumber(price) {
+				return price.replaceAll(",", "").replace("원", "").replace(" ", "");
+			}
+
+			$('.menu').click(function () {
+
+				menuId = $(this).attr("menuid");
+				isExist = false;
+
+				orderlist.forEach(function (element) {
+					if (element.compareMenuId(menuId)) {
+						element.plus();
+						$('#menu' + menuId + '-quantity').text(element.quantity);
+						$('#menu' + menuId + '-price').text(element.totalPriceForm());
+						console.log("존재하는 메뉴가 데이터에 들어감 : " + orderlist);
+						isExist = true;
+					}
+				});
+
+				if (isExist) {
+					orderTotalPrice();
+					return;
+				}
+				const menuPrice = $(this).find('.menu-price').text();
+				const menuName = $(this).find('.menu-name').text();
+
+				orderlist.push(new Order(menuId, prcieToNumber(menuPrice)));
+				console.log("새로운 메뉴가 데이터에 들어감 : " + orderlist);
+
+
+				// 부모
+				const parent = $("#menuAdd");
+
+				// 메뉴명
+				const menuNameEl = $("<div>").addClass("col-sm-4").text(menuName);
+
+				// 가격
+				const menuPriceEl = $("<div>").addClass("col-sm-4").attr("id", "menu" + menuId + "-price").text(menuPrice);
+
+				// 수량
+				const minusBtn = $("<div>").addClass("col-sm-1 minus-btn remove-list").attr("menuid", menuId).append($("<i>").addClass("fa-solid fa-minus"));
+				const quantityEl = $("<div>").addClass("col-sm-1 menu-quantity").attr("id", "menu" + menuId + "-quantity").text(1);
+				const plusBtn = $("<div>").addClass("col-sm-1 plus-btn remove-list").attr("menuid", menuId).append($("<i>").addClass("fa-solid fa-plus"));
+				// 삭제 버튼
+				const deleteBtn = $("<div>").addClass("col-sm-1 delete-btn remove-list").attr("menuid", menuId).append($("<i>").addClass("fa-solid fa-xmark"));
+
+				// 전체 요소 생성
+				const row = $("<div>").addClass("row order-row").attr("id", "menu" + menuId);
+				row.append(menuNameEl, menuPriceEl, minusBtn, quantityEl, plusBtn, deleteBtn);
+				// 부모 요소에 자식 요소 추가
+				parent.append(row).append($("<hr>"));
+
+				orderTotalPrice();
+			})
+
+			$(document).on('click', '.minus-btn', function () {
+
+				menuId = $(this).attr('menuid');
+				orderlist.forEach(function (element) {
+					if (element.compareMenuId(menuId)) {
+						if (!element.minus()) {
+							console.log("하나가 최소치입니다.");
+							return;
+						}
+						$('#menu' + menuId + '-quantity').text(element.quantity);
+						$('#menu' + menuId + '-price').text(element.totalPriceForm());
+						console.log("존재하는 메뉴가 데이터에 들어감 : " + orderlist);
+						return;
+					}
+
+					console.log("?? 왜 여기옴??")
+				});
+				orderTotalPrice();
+
+			});
+			$(document).on('click', '.plus-btn', function () {
+
+				menuId = $(this).attr('menuid');
+				orderlist.forEach(function (element) {
+					if (element.compareMenuId(menuId)) {
+
+						element.plus();
+						$('#menu' + menuId + '-quantity').text(element.quantity);
+						$('#menu' + menuId + '-price').text(element.totalPriceForm());
+						console.log("존재하는 메뉴가 데이터에 들어감 : " + orderlist);
+						return;
+					}
+
+
+				});
+				orderTotalPrice();
+
+
+			});
+
+			$(document).on('click', '.delete-btn', function () {
+				menuId = $(this).attr('menuid');
+				const index = orderlist.findIndex(element => element.compareMenuId(menuId));
+				if (index > -1) {
+					orderlist.splice(index, 1);
+				}
+				const hrElement = $('#menu' + menuId).next('hr');
+
+				$('#menu' + menuId).remove();
+				hrElement.remove();
+
+				orderTotalPrice();
+			});
+
+			function orderTotalPrice() {
+				let totalPrice = 0;
+				orderlist.forEach(element => {
+					totalPrice = totalPrice + element.totalPrice();
+					console.log(totalPrice);
+				});
+
+				$('#total-price').text(totalPrice.toLocaleString() + ' 원');
+
+			}
+
+			$('#reservation-btn').click(function (event) {
+				event.preventDefault();
+
+				orderMenuList = orderlist.map(order => new OrderData(order));
+				csrfValue = $("input[name='_csrf']").val();
+				totalPrice = $('#total-price').text().replaceAll(",", "").replace("원", "").replace(" ", "");
+
+				$.ajax({
+					url: "[[@{|/restaurant/reservation/${reservationInfo.id}/menus2|}]]",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({
+						data: orderMenuList,
+						price: totalPrice,
+						_csrf: csrfValue
+					}),
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("X-CSRF-Token", csrfValue);
+					},
+					success: function (response) {
+
+						let formaction = $('#reservation-form').attr("action");
+						$('#reservation-form').attr("action", formaction.replace("cancel", "paymentPage"));
+						$('#reservation-form').submit();
+
+					}
+				});
+			})
+
+		})
+
+
+	</script>
+
+</head>
+<style>
+
+</style>
+<body>
+	<div th:replace="fragments/header::WaEating_header"></div>
+	<div class="menu-nav">
+		<div th:each="menuCategory,menuStat : ${menuList}" th:text="${menuCategory.categoryName}"
+			class="category-header btn btn-light" th:onclick="|moveCategory(${menuStat.index})|">
+		</div>
+	</div>
+	<div id="menuDiv">
+		<hr>
+		<div class="menu-order-list">
+			<div th:each="menuCategory,menuStat : ${menuList}">
+				<div class="menu-category" th:text="${menuCategory.categoryName}" th:id="|category${menuStat.index}|">
+				</div>
+				<!---->
+				<section class="foodMain">
+					<div class="full-boxer">
+						<div class="comment-box  menu  menu-list" th:each="menu : ${menuCategory.menus}"
+							th:menuid="${menu.id}">
+							<div class="box-top">
+								<div class="Profile">
+									<div class="profile-image">
+										<img class="menu-img" th:src="@{${menu.imagePath}}">
+									</div>
+									<div class="Name">
+										<strong class="menu-name">[[${menu.name}]]</strong>
+										<span class="menu-price">[[${menu.formatPrice}]]</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<!---->
+				<hr class="menu-hr">
+			</div>
+		</div>
+	</div>
+
+
+
+	<div id="oreder-menu-list">
+		<div class="rightcomment-box">
+			<div class="Profile">
+				<div class="Name">
+					<strong>[[${reservationInfo.restaurantName}]]</strong>
+					<span><i class="fa-solid fa-calendar-days"></i> 예약일 : [[${reservationInfo.reservationDate()}]]
+					</span>
+					<span><i class="fa-solid fa-person"></i> 총 인원 : [[${reservationInfo.bookPeople}]] </span>
+				</div>
+			</div>
+		</div>
+		<!--					<div id="reservation-info-head-img">
+						<img th:src="@{/img/mainBanner/res1.jpg}" />
+					</div>-->
+		<hr>
+		<p id="rec">주문서</p>
+		<div class="row">
+			<div class="col-sm-4"> 메뉴명</div>
+			<div class="col-sm-4"> 가격</div>
+			<div class="col-sm-3 col-header-quantity"> 수량</div>
+			<div class="col-sm-1 col-header-delete"> </div>
+		</div>
+		<hr>
+		<div id="menuAdd">
+			<th:block th:if="${orderList!=null}"  th:each="order :${orderList}">
+			
+				<div class="row order-row" th:id="|menu${order.id}|">
+					<div class="col-sm-4">[[${order.name}]]</div>
+					<div class="col-sm-4" th:id="|menu${order.id}-price|">[[${order.totalPriceForm()}]] </div>
+					<div class="col-sm-1 minus-btn remove-list" th:menuid="${order.id}">
+						<i class="fa-solid fa-minus"></i>
+					</div>
+					<div class="col-sm-1 menu-quantity" th:id="|menu${order.id}-quantity|">[[${order.quantity}]]</div>
+					<div class="col-sm-1 plus-btn remove-list" th:menuid="${order.id}">
+						<i class="fa-solid fa-plus"></i>
+					</div>
+					<div class="col-sm-1 delete-btn remove-list" th:menuid="${order.id}">
+						<i class="fa-solid fa-xmark"></i>
+					</div>
+				</div>
+				<hr>
+			</th:block>
+		</div>
+		<div id="totalPrice">주문금액 <span id="total-price"> 0원</span></div>
+		<hr>
+		<div id="menu-btn-div">
+			<form id="reservation-form" th:action="@{|/restaurant/reservation/${reservationInfo.id}/cancel|}"
+				method="post">
+				<button class="btn menu-btn remove-list" id="cancle-btn">취소하기</button>
+				<button class="btn menu-btn remove-list" id="reservation-btn">예약하기</button>
+			</form>
+		</div>
+	</div>
+
+	</div>
+
+
+</body>
+
+</html>

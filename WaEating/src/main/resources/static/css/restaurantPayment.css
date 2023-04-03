@@ -1,0 +1,279 @@
+html,
+body {
+	height: 100%;
+}
+
+#load-myInfo-btn {
+	float: right;
+	padding: 3px 10px;
+	font-size: 13px;
+
+}
+
+#menuDiv {
+	overflow: scroll;
+	width: 60%;
+	float: left;
+	box-shadow: 1px 1px 4px rgb(0 0 0 / 80%);
+	margin-left: 5%;
+	margin-top: 3%;
+	padding: 2%;
+	height: 70%;
+	border-radius: 20px;
+}
+
+#menuDiv::-webkit-scrollbar {
+	display: none;
+}
+
+.menu-category {
+	width: 100%;
+	padding: 1% 2%;
+	background-color: lightgray;
+}
+
+#reservation-info {
+	border: 1px solid;
+	padding: 2%;
+	margin: 5% 5% 0 0;
+	border-radius: 1%;
+}
+
+.menu-info {
+
+	width: 100%;
+	text-align: center;
+	float: right;
+}
+
+#oreder-menu-list {
+	width: 500px;
+	box-shadow: 1px 1px 4px rgb(0 0 0 / 80%);
+	min-height: 20%;
+	margin: 3% 5% 0 0;
+	border-radius: 20px;
+	text-align: center;
+	float: right;
+}
+
+.category-header {
+	float: left;
+	border: 1px solid;
+	padding: 1%;
+	width: 15%;
+	margin: 1%;
+	text-align: center;
+	border-radius: 30px;
+}
+
+hr {
+	clear: both;
+}
+
+.menu-btn {
+	width: 44%;
+	margin: 0 3%;
+}
+
+#menu-btn-div {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.menu-nav {
+	position: fixed;
+	top: 10.5%;
+	width: 60%;
+	margin-left: 5%;
+	background: darkolivegreen;
+	z-index: 9999;
+	border: solid 2px black;
+}
+
+#cancel-btn {
+	background: lightcoral;
+	width: 30%;
+}
+
+#cancel-btn:hover {
+	background: coral;
+}
+
+#reservation-btn {
+	background: lightgreen;
+	width: 30%;
+}
+
+#reservation-btn:hover {
+	background: lightgreen;
+	width: 30%;
+}
+
+.btn:hover {
+	color: #fff;
+}
+
+#reservation-info-head-img {
+	width: 100px;
+	height: 100px;
+}
+
+#reservation-info-head-img img {
+	width: 100%;
+}
+
+#rec {
+	border: solid 2px gainsboro;
+	background: #fffcf7;
+	align-items: center;
+	display: grid;
+	height: 50px;
+}
+
+.row {
+	padding: 2px;
+	margin-right: 5px;
+	font-family: 'Josefin Sans', sans-serif;
+	font-weight: bolder;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: 150px;
+	box-sizing: border-box;
+}
+
+.full-boxer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 97%;
+	margin: 0 auto;
+}
+
+.menu {
+	justify-content: flex-start;
+}
+
+.box-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.comment-box:hover {
+	/*margin-top: 12px;*/
+}
+
+.comment-box {
+	width: 100%;
+	background: white;
+	padding: 20px;
+	margin: 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.Profile {
+	display: flex;
+	align-items: center;
+}
+
+.profile-image {
+	width: 150px;
+	height: 150px;
+	box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	border-radius: 10%;
+	margin-right: 10px;
+}
+
+.profile-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.Name {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.box-top .Profile .Name strong {
+	color: black;
+	font-size: 45px;
+}
+
+.box-top .Profile .Name span {
+	color: gray;
+	margin-top: 2px;
+	font-size: 15px;
+}
+
+.Name strong {
+	color: black;
+	font-size: 18px;
+}
+
+.Name span {
+	color: gray;
+	margin-top: 2px;
+}
+
+.comment p {
+	color: black;
+}
+
+#right {
+	width: 100%;
+	padding: 4.5%;
+	display: grid;
+	justify-content: right;
+}
+
+.rightcomment-box {
+	background: white;
+	padding: 20px;
+	margin: 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-family: 'Josefin Sans', sans-serif;
+	display: flex;
+}
+
+.rightcomment-box .Profile {
+	margin: 0 auto;
+}
+
+#totalPrice {
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: large;
+	font-weight: 700;
+	display: flex;
+	justify-content: space-around;
+}
+
+#total-price {
+	color: #d69b9b;
+	margin-left: 9%;
+}
+
+.btn-info {
+	border: solid gainsboro 2px;
+	background: none;
+	color: black;
+}
+
+.btn-info:hover {
+	border: solid gainsboro 2px;
+	background: #fffcf7;
+	color: black;
+}

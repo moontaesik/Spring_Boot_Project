@@ -1,0 +1,296 @@
+html,
+body {
+	height: 100%;
+}
+
+
+#menuDiv {
+	overflow: scroll;
+	width: 60%;
+	float: left;
+	border: 2px solid gainsboro;
+	margin-left: 5%;
+	margin-top: 3%;
+	padding: 2%;
+	height: 80%;
+	position: fixed;
+	border-radius: 20px;
+}
+
+#menuDiv::-webkit-scrollbar {
+	display: none;
+}
+
+.menu-category {
+	width: 95%;
+	padding: 1% 2%;
+	background-color:  #fffcf7;
+	border-radius: 20px;
+	margin: 0 auto;
+	font-weight: 400;
+	border: solid 2px gainsboro;
+}
+
+#reservation-info {
+	border: 1px solid;
+	padding: 2%;
+	margin: 5% 5% 0 0;
+	border-radius: 1%;
+}
+
+.menu-info {
+
+	width: 100%;
+	text-align: center;
+	float: right;
+}
+
+#oreder-menu-list {
+	width: 500px;
+	border: solid 2px #e8dddd;
+	border-radius: 1%;
+	text-align: center;
+	float: right;
+	margin-right: 5%;
+	margin-top: 3%;
+	border-radius: 20px;
+}
+
+.category-header {
+	float: left;
+	border: 1px solid;
+	padding: 1%;
+	width: 15%;
+	margin: 1%;
+	text-align: center;
+	border-radius: 30px;
+}
+
+hr {
+	clear: both;
+}
+
+.menu-btn {
+	width: 44%;
+	margin: 0 3%;
+}
+
+#menu-btn-div {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.menu-nav {
+	position: fixed;
+	top: 127px;
+	width: 60%;
+	margin-left: 5%;
+	background:  #fffcf7;
+	z-index: 9999;
+	border-radius: 20px 20px 0 0;
+	border: solid 2px gainsboro;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+#cancel-btn {
+	background: lightcoral;
+	width: 30%;
+}
+
+#cancel-btn:hover {
+	background: coral;
+}
+
+#reservation-btn {
+	background: lightgreen;
+	width: 30%;
+}
+
+#reservation-btn:hover {
+	background: lightgreen;
+	width: 30%;
+}
+
+.btn:hover {
+	color: #fff;
+}
+
+#reservation-info-head-img {
+	width: 100px;
+	height: 100px;
+}
+
+#reservation-info-head-img img {
+	width: 100%;
+}
+
+#rec {
+	border: solid 1px gainsboro;
+	background: #fffcf7;
+	align-items: center;
+	display: grid;
+	height: 50px;
+}
+
+.row {
+	padding: 2px;
+	font-family: 'Josefin Sans', sans-serif;
+	font-weight: bolder;
+	margin-right: 15px !important;
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: 150px;
+	box-sizing: border-box;
+}
+
+.full-boxer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.menu {
+	justify-content: flex-start;
+}
+
+.box-top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.comment-box:hover {
+	margin-top: 12px;
+}
+
+.comment-box {
+	width: 46%;
+	background: white;
+	padding: 20px;
+	margin: 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+}
+
+.Profile {
+	display: flex;
+	align-items: center;
+}
+
+.profile-image {
+	width: 150px;
+	height: 150px;
+	box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.profile-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.Name {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.Name strong {
+	color: black;
+	font-size: 18px;
+}
+
+.Name span {
+	color: gray;
+	margin-top: 2px;
+}
+
+.comment p {
+	color: black;
+}
+
+#right {
+	width: 100%;
+	padding: 7% 4.5%;
+	display: grid;
+	justify-content: right;
+}
+
+.rightcomment-box {
+	background: white;
+	padding: 20px;
+	margin: 15px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-family: 'Josefin Sans', sans-serif;
+	display: flex;
+}
+
+.rightcomment-box .Profile {
+	margin: 0 auto;
+}
+
+#totalPrice {
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: large;
+	font-weight: 700;
+	display: flex;
+	justify-content: space-around;
+}
+
+#total-price {
+	color: #d69b9b;
+	margin-left: 9%;
+}
+
+#cancle-btn {
+	width: 30%;
+	border: solid #f6cbcb 2px;
+	background: none;
+}
+
+#cancle-btn:hover {
+	border: solid #f6cbcb 3px;
+	background: none;
+}
+
+
+#reservation-btn {
+	width: 30%;
+	border: solid #b6b6ec 2px;
+	background: none;
+}
+
+#reservation-btn:hover {
+	border: solid #b6b6ec 3px;
+	background: none;
+}
+
+
+	.btn-light {
+    color: #212529;
+    background-color: rgb(254 251 251);
+    border: 2px solid #d9d1dd !important;
+    width: 12%;
+    border-radius: 25px;
+}
+
+	.btn-light:hover{
+    box-shadow: 
+    inset 0 0 0 100px rgb(237, 231, 231);
+    opacity: 1;transform: scale(1);
+}

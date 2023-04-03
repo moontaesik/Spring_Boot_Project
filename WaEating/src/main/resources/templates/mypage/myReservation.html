@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+   <link rel="stylesheet" th:href="@{/css/side.css}">
+   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+
+   $(document).ready(function () {
+
+      $('.modify-btn').click(function () {
+         var form = $(this).closest('form');
+         let action = form.attr("action");
+         action = action.replace("cancel", "modify");
+         form.attr("action", action);
+         form.submit();
+      })
+      
+      $('.mid-td').click(function () {
+			MoveURL = $(this).attr("url");
+		   	window.location.href = MoveURL;
+		})
+   })
+</script>
+<style>
+	#search-wrap {
+      width: 50%;
+      position: relative;
+      border: 1px solid #DDDDDD;
+      border-radius: 4px;
+      background: #F8F8F8;
+      padding: 1%;
+      clear: both;
+      overflow: auto;
+      margin-bottom: -1%;
+   }
+   
+   select {
+      float: left;
+      padding: 0.75%;
+      border-radius: 3px;
+      margin-right: 2%;
+   }
+   
+   input[type="text"] {
+      width: 60%;
+      margin-right: 2%;
+      border: 1px solid #DDD;
+      padding: 0.7%;
+      border-radius: 5px;
+      float: left;
+   }
+   
+   #inquiry-search-button {
+      border-radius: 3px;
+      width: 10%;
+      padding: 1.2% 0.7% 0.7% 0.7%;
+      border-width: thin;
+      font-size: 82%;
+      font-weight: bold;
+      background-color: #414141;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      float: left;
+      margin-right: 2%;
+   }
+   
+/*페이징*/
+
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+		margin-top: 2%;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item.active .page-link{
+		border: 2px solid #574343;
+		background: white;
+		color: black;
+	}
+	.page-link:hover {
+		color: rgb(90, 85, 78);
+		}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+
+</style>
+
+<body>
+   <div th:replace="fragments/header:: WaEating_header"></div>
+
+   <!--side-->
+   <div class="sideWrapper">
+      <div class="sidebar">
+        <ul th:replace="fragments/side_mypage:: WaEating_sider_mypage">
+
+         	</ul>
+      </div>
+      <div class="test">
+         <div class="main_content">
+            <div class="main_content_header">
+               <h1>현재 예약목록</h1>
+            </div>
+            <hr>
+            <div th:if="${#lists.isEmpty(reservation)}" class="text-center">
+               <h4>현재 예약 정보가 없습니다.</h4>
+            </div>
+            <table th:if="${!#lists.isEmpty(reservation)}" class="table table-bordered text-center">
+               <thead class="thead-dark">
+                  <tr>
+                     <th>Restaurant</th>
+                     <th>Time</th>
+                     <th>People</th>
+                     <th>Amount</th>
+                     <th>Reservation</th>
+                     <th>Detail</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr th:each="reser: ${reservation}">
+                     <td class="mid-td" th:url="|@{/restaurant/}${reser.restaurantId}|">[[${reser.restaurantName}]]</td>
+                     <td>[[${reser.reservationDate()}]]</td>
+                     <td>[[${reser.bookPeople}]]</td>
+                     <td>[[${reser.amount}]]</td>
+                     <td>
+                        <div id="tableReview">
+                           <form th:action="@{|/restaurant/reservation/${reser.id}/cancel|}" method="post">
+
+                              <button class="modify-btn btn btn-light" th:reservationid="${reser.id}"><i
+                                    class="fa-solid fa-calendar-days fa-2x"></i>주문 수정</button> |
+                              <button class="btn btn-light"><i
+                                    class="fa-solid fa-calendar-xmark fa-2x "></i>예약 취소</button>
+                           </form>
+                        </div>
+                     </td>
+                     <td>
+						 <form method="get" th:action="@{/restaurant/reservation/{reservationId}/details(reservationId=${reser.id})}">
+							
+                            <button type="submit" class="btn btn-light"><i class="fa-solid fa-receipt fa-2x"></i>상세정보</button>
+                        </form>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <hr>
+            <div style="margin: 1% 0 1% 5%;">
+	            <div style="display: inline-block; margin-right: 2%;">
+	               <h1>지난 예약목록</h1>
+	            </div>
+	           
+            </div>
+            <hr>
+            <table class="table table-bordered text-center">
+               <thead class="thead-dark">
+                  <tr>
+                     <th>Restaurant</th>
+                     <th>Time</th>
+                     <th>People</th>
+                     <th>Amount</th>
+                     <th>Review</th>
+                     <th>Detail</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr th:each="reser: ${latereservation}">
+                     <td class="mid-td" th:url="|@{/restaurant/}${reser.restaurantId}|">[[${reser.restaurantName}]]</td>
+                     <td>[[${reser.reservationDate()}]]</td>
+                     <td>[[${reser.bookPeople}]]</td>
+                     <td>[[${reser.amount}]]</td>
+                     <td>
+                        <div th:if="${!reser.hasComment}">
+                           <a th:href="@{'/mypage/review/new/'+${reser.id}}" class="btn btn-light"><i
+                                 class="fa-solid fa-pen fa-2x"></i>리뷰 작성</a>
+                        </div>
+                        <div th:if="${reser.hasComment}">
+                           <a th:if="${reser.hasComment}" th:href="@{'/mypage/review/update/'+${reser.id}}"
+                              class="btn btn-light"><i class="fa-solid fa-pen-to-square fa-2x"></i>리뷰 수정</a>
+                           &nbsp;|&nbsp;
+                           <a th:if="${reser.hasComment}" th:href="@{'/mypage/review/delete/'+${reser.id}}"
+                              class="btn btn-light"><i class="fa-solid fa-trash-can fa-2x"></i>리뷰 삭제</a>
+                        </div>
+                     </td>
+                     <td>
+                        <form method="get" th:action="@{/restaurant/reservation/{reservationId}/details(reservationId=${reser.id})}">
+							
+                            <button type="submit" class="btn btn-light"><i class="fa-solid fa-receipt fa-2x"></i>상세정보</button>
+                        </form>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <div>
+               <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                     <li class="page-item" th:if="${prevIsEnabled}">
+                        <a class="page-link" th:page="${pageList.get(0)-2}"
+                           th:href="@{'?page=' + ${currentPage-1}}">Prev</a>
+                     </li>
+                     <li th:class="${page == currentPage? 'page-item active':'page-item'}"
+                        th:each="page: ${pageList}">
+                        <a class="page-link" th:text="${page}" th:page="${page-1}"
+                           th:href="@{'?page=' + ${page}}"></a>
+                     </li>
+                     <li class="page-item" th:if="${nextIsEnabled}">
+                        <a class="page-link" th:href="@{'?page=' + ${pageList.get(4)+1}}">Next</a>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
+         </div>
+      </div>
+   </div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

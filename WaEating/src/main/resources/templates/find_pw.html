@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.htymeleaf.org">
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />	
+<head>
+    <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+   	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Reservation foodTable</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+   	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript">
+		function findPwForm(form){
+      		url = "[[@{/login/findPassword}]]";
+      		
+      		memberUserId = $("#ID").val();
+      		memberPhone = $("#phone").val();
+      		csrfValue = $("input[name='_csrf']").val();
+      
+     		params = {userId: memberUserId, phone: memberPhone , _csrf: csrfValue};
+      
+      		$.post(url,params,function(response){
+				if(response == "noId"){
+					showModalDialog("Warning","Not found ID : " + memberUserId);
+				}else if(response == "noPhone"){
+					showModalDialog("Warning","Not found Phone : " + memberPhone);
+				}else if(response == "noIdPhone"){
+					showModalDialog("Warning","Not found ID : " + memberUserId + "and Phone : " +  + memberPhone);
+				}else{
+					showModalDialog("success","Password : " + response);
+				}
+			}).fail(function(){
+				showModalDialog("Error","Could not connect to the server");
+			});
+			return false;
+   		}
+   		
+   		function showModalDialog(title,message){
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialog").modal();
+		}
+	</script>
+</head>
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="wrapper">
+		<div class="title">
+			비밀번호 찾기
+		</div>
+		<form th:action="@{/login}" method="post" onsubmit="return findPwForm(this)">
+			<div class="field">
+				<input type="text" name="ID" id="ID" required>
+				<label>이름</label>
+			</div>
+			<div class="field">
+				<input type="text" name="phone" id="phone" required>
+				<label>전화번호</label>
+			</div>
+			<div class="content">
+				<div class="pass-link">
+					
+				</div>
+			</div>
+			<div class="field">
+				<input type="submit" value="조회하기">
+			</div>
+			<div class="signup-link">
+				회원이 아니십니까? <a th:href="@{/member/join}">회원가입</a>
+			</div>
+		</form>
+	</div>
+
+	<div class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalTitle">Warning</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">Close</button>
+					<button type="button" class="btn" data-dismiss="modal" th:onclick="|window.location.href='@{/login}'|">로그인페이지 이동하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>    
+</html>

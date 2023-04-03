@@ -1,0 +1,247 @@
+ /* Google Fonts - Poppins */
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+ *{
+   margin: 0;
+   padding: 0;
+ }
+ 
+  	#mainBody{
+		width: 90%;
+		margin: 0 auto;
+	}
+	body{
+		background: whitesmoke;
+	}
+ 
+ hr{
+	 width: 96%;
+	 margin: 0 0 15px 40px;
+ }
+ .cardTitle{
+	margin: 5% auto -1%;
+	text-align: center;
+    font-size: 33px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bolder;
+    color: #836962;
+ }
+ 
+ .slide-container.swiper{
+   max-width: 2000px;
+   width: 80%;
+   padding: 40px 0;
+ }
+ .slide-content{
+   margin: 0 40px;
+   overflow: hidden;
+ }
+ .card{
+   box-sizing: border-box;
+ }
+ 
+ .card:hover{
+	 transform: scale(1.04);
+ }
+ .image-content,
+ .card-content{
+   display: grid;
+   justify-content: center;
+   align-items: center;
+   padding: 14px;
+   box-sizing: border-box;
+ 	height: 150px;
+ }
+ 
+ .card-content2{
+	 display: flex;
+	 justify-content: space-between;
+ }
+ 
+ 	 .resScore img{
+	    width: 20px;
+	    height: 20px;
+	    margin-bottom: 3%;
+	}
+ 
+ .image-content{
+   position: relative;
+   /* row-gap: 5px;
+   padding: 25px 0; */
+ }
+
+    .categoryBottom{
+        float: left;
+        padding: 3px;
+        font-size: 12px;
+    }
+
+    .catSub{
+    }
+    .details{
+        height: 70px;
+        font-size: 14px;
+        color: #707070;
+        text-align:left;       
+        word-break:break-all;
+        
+    }
+ .card-image{
+   position: relative;
+   height: 150px;
+   width: 100%;
+   /* border-radius: 50%; */
+   /* background: rgb(19, 19, 155); */
+ }
+ .card-image .card-img{
+   height: 100%;
+   width: 100%;
+   object-fit: cover;
+   /*border-radius: 25px 25px 25px 25px ;*/
+   border: 1px solid #9e6611;
+   box-sizing: border-box;
+ }
+ .name{
+   font-size: 20px;
+   font-weight: 600;
+   color: #333;
+ }
+ .description{
+   font-size: 14px;
+   color: #707070;
+   text-align: center;
+ }
+ .button{
+   border: none;
+   font-size: 16px;
+   color: #FFF;
+   padding: 8px 16px;
+   background-color: #4070F4;
+   border-radius: 6px;
+   margin: 14px;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+ .button:hover{
+   background: #265DF2;
+ }
+ 
+ .swiper-navBtn{
+   display: block; /* Add this line to always display the button */	 
+   color: #6E93f7;
+   transition: color 0.3s ease;
+ }
+ .swiper-navBtn:hover{
+   color: #4070F4;
+ }
+ .swiper-navBtn::before,
+ .swiper-navBtn::after{
+   font-size: 35px;
+ }
+ .swiper-button-next{
+  /*background-color: #fff;*/
+  padding: 50px 120px;
+  border-radius: 20px;
+  color: #9f6767;
+ }
+ .swiper-button-prev{
+  /*background-color: #fff;*/
+  padding: 50px 120px;
+  border-radius: 20px;
+  color: #9f6767;
+ }
+ .swiper-pagination-bullet{
+   background-color: rgb(64, 0, 64);
+   opacity: 1;
+ }
+ .swiper-pagination-bullet-active{
+   background-color: 	rgb(64, 0, 64);
+ }
+ 
+ @media screen and (max-width: 768px) {
+   .slide-content{
+     margin: 0 10px;
+    }
+   .swiper-navBtn{
+    /* display: none;*/
+   }
+ }
+ 
+ 
+ /* display: none;*/
+ 
+ /*순서 색변경*/
+/* .card:nth-child(-n+3) {
+  background-color: red;
+}
+
+
+ .card:nth-child(-n+2) {
+  background-color: blueviolet;
+}
+
+ .card:nth-child(-n+1) {
+  background-color: darkcyan;
+  background-image: url('/img/rating/star.png');
+}*/
+
+.ranking{
+	width: 62px;
+	position: absolute;
+}
+
+
+    .rankWordContainer .rankWord {
+      /* Best 1 */
+
+
+      width: 37px;
+      height: 13px;
+
+      font-family: 'Josefin Sans', sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 13px;
+      /* identical to box height, or 100% */
+
+
+      color: #ff0000;
+
+
+      /* Inside auto layout */
+
+      flex: none;
+      order: 0;
+      flex-grow: 0;
+   }
+
+   .rankWordContainer {
+      /* Frame 20 */
+
+
+      /* Auto layout */
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 6px;
+      gap: 4px;
+
+      position: absolute;
+      width: 49px;
+      height: 21px;
+       left: 7px;
+       top: 6px;
+
+      background: #FFF3E0;
+      border-radius: 4px;
+
+      /* Inside auto layout */
+
+      flex: none;
+      order: 2;
+      flex-grow: 0;
+      z-index: 2;
+   } 

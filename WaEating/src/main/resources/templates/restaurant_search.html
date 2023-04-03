@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/searchHeader::WaEating_head" />
+
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>foodTable</title>
+</head>
+
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://code.jquery.com/jquery-3.6.3.js"
+		integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/restaurant_search.css}" />
+	<title>foodTable</title>
+</head>
+
+<body>
+	<div th:replace="fragments/searchHeader:: WaEating_header"></div>
+	<form th:action="@{/}" method="post"></form>
+	<div id="sb">
+		<div id="searchBox-sentence">
+			<h2>WaEating RESERVATION</h2>
+			<h1>MAKE A FREE RESERVATION</h1>
+		</div>
+		<div id="search-box">
+			<!--전체-->
+			<div>
+				<select id="filterId" style="width: 100px;" class="btn btn-light">
+					<option value="3">전체</option>
+					<option value="1">메뉴명</option>
+					<option value="2">가게명</option>
+				</select>
+			</div>	
+			<div>
+				<!--정렬-->
+				<select style="text-align: center;" name="sorting" id="sorting"  class="btn btn-light">
+					<option value="0">정렬</option>
+					<option value="1">별점순</option>
+					<option value="2">리뷰순</option>
+					<option value="3">예약순</option>
+				</select>
+			</div>	
+			<div>	
+				<!--필터-->
+				<input type="button" id="filterModal" value="필터" style="font-size: 16px;" class="btn btn-light">
+			</div>
+			<!--검색-->
+			<input type="search" name="searchQuery"
+				th:value="${searchQuery != null and searchQuery != '' ? searchQuery : keyword}" class="form-control"
+				placeholder="가게명/지역/카테고리를 입력해주세요">
+			<!--검색-->
+			<button id="searchBtn" class="btn btn-danger">검색</button>
+		</div>
+	</div>
+	<!--	<div style="display:flex; justify-content: center; padding: 1%; margin: 2%">
+		<h1>검색 결과 : 라밥 </h1>
+	</div>-->
+	<hr style="width: 90%; margin: 0 auto 3%;">
+
+	<!--ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ가게창ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ-->
+
+	<section class="resmain">
+		<div class="full-boxer">
+			<div class="comment-box" th:each="list:${restaurantList.content}" th:data-url="@{/restaurant/{id}(id=${list.id})}">
+				<div class="box-top">
+					<div class="Profile">
+						<div class="profile-image">
+							<img th:src="@{${list.photosImagePath}}">
+						</div>
+					</div>
+				</div>
+				<div class="Name">
+					<strong>[[${list.name}]]</strong>
+					<strong>별점 : <img th:src="@{/img/rating/star.png}">[[${list.totalScore}]]</strong>
+				</div>
+				<div class="comment">
+					<span><i class="fa-solid fa-location-dot"></i> [[${list.address}]]</span>
+					<span><i class="fa-solid fa-phone"></i> [[${list.phone}]]</span>
+					<span><i class="fa-solid fa-calendar-days"></i> [[${list.openCloseTimes}]]</span>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<div th:if="${restaurantList.totalPages > 1}" style="margin:0 45% 0 45%; width: 10%;">
+		<nav aria-label="Page navigation example" id="pagination-container">
+        <ul class="pagination">
+            <!-- 이전 페이지 버튼 -->
+            <li th:if="${restaurantList.hasPrevious()}" class="page-item">
+                <a class="page-link" >Prev</a>
+            </li>
+            <!-- 페이지 버튼 -->
+            <li th:each="page : ${#numbers.sequence(0, restaurantList.totalPages - 1)}" 
+                th:class="${restaurantList.number == page ? 'active' : ''}">
+                <a th:text="${page + 1}" class="page-link"></a>
+            </li>
+            <!-- 다음 페이지 버튼 -->
+            <li class="page-item" th:if="${restaurantList.hasNext()}">
+                <a class="page-link">Next</a>
+            </li>
+        </ul>
+        </nav>
+    </div>
+	
+
+
+	<!--ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+
+	<!--모달창-->
+	<div id="my_modal">
+		<!--카테고리-->
+		<div id="modalCat">
+			<label class="modalName">음식 카테고리</label>
+			<div class="modalInner">
+				<div class="form-check" style="float:left;" th:each="category:${categoryList}">
+					<button class="form-check-button btn btn-light" th:value="${category.id}"
+						onclick="categoryButton(this)">[[${category.name}]]</button>
+				</div>
+			</div>
+		</div>
+		<hr>
+
+
+
+
+		<!--가격대-->
+		<div id="modalprice">
+			<label class="modalName">가격대</label>
+			<div class="modalInner">
+				<div class="form-check" style="float:left;" th:each="priceRange:${priceRangeList}">
+					<button class="form-check-button btn btn-light" th:value="${priceRange}"
+						onclick="priceButton(this)">[[${priceRange}]]</button>
+				</div>
+			</div>
+		</div>
+		<hr>
+
+
+		<!--지역-->
+		<div id="modalReg">
+			<label class="modalName">지역</label>
+			<div class="modalInner">
+				<div class="form-check" style="float:left;" th:each="area:${areaList}">
+					<button class="form-check-button btn btn-light" th:value="${area.id}" id="si"
+						onclick="areaButton(this)">[[${area.name}]]</button>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div>
+			<div id="guDiv">
+				<div id="gu"></div>
+			</div>
+			<hr>
+			<div id="dongDiv">
+				<div id="dong"></div>
+
+			</div>
+			<hr>
+		</div>
+		<div class="modal_btn">
+			<button class="modal_cancle_btn">취소</button>
+			<button class="modal_sort_btn">적용</button>
+		</div>
+
+
+	</div>
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+
+	<!--ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+
+
+
+
+
+
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('.comment-box').click(function () {
+				var url = $(this).data('url');
+				window.location.href = url;
+			});
+		});
+
+
+
+		document.getElementById('filterModal').addEventListener('click', function () {
+			modal('my_modal');
+		});
+		document.getElementById('searchBtn').addEventListener('click', function () {
+			sendData();
+		});
+		document.getElementById('sorting').addEventListener('change', function () {
+			sendData();
+		});
+
+
+
+
+
+
+
+
+		function modal(id) {
+			var zIndex = 9999;
+			var modal = document.getElementById(id);
+
+			// 모달 div 뒤에 희끄무레한 레이어
+			var bg = document.createElement('div');
+			bg.setStyle({
+				position: 'fixed',
+				zIndex: zIndex,
+				left: '0px',
+				top: '0px',
+				width: '100%',
+				height: '100%',
+				overflow: 'auto',
+				// 레이어 색갈은 여기서 바꾸면 됨
+				backgroundColor: 'rgba(0,0,0, 77%)'
+			});
+			document.body.append(bg);
+
+			// 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+			modal.querySelector('.modal_cancle_btn').addEventListener('click', function () {
+				bg.remove();
+				modal.style.display = 'none';
+				resetModal();
+			});
+			modal.querySelector('.modal_cancle_btn').addEventListener('click', function () {
+				bg.remove();
+				modal.style.display = 'none';
+				resetModal();
+			});
+			modal.querySelector('.modal_sort_btn').addEventListener('click', function () {
+				bg.remove();
+				modal.style.display = 'none';
+				categorySet.forEach(function (value) {
+					console.log(value);
+				});
+			});
+
+			modal.setStyle({
+				position: 'fixed', //모달창 고정 위치 설정
+				display: 'block',  // 모달창 보이도록 설정
+
+				// 시꺼먼 레이어 보다 한칸 위에 보이기
+				zIndex: zIndex + 1,
+
+				// 모달창 센터정렬을 위한 설정 
+				top: '50%',
+				left: '50%',
+				transform: 'translate(-50%, -50%)',   // 그냥 모달창 정중앙
+				msTransform: 'translate(-50%, -50%)',  //인터넷익스폴로우에서 정중앙
+				webkitTransform: 'translate(-50%, -50%)' //크롬에서 정중앙
+			});
+		}
+
+		// Element 에 style 한번에 오브젝트로 설정하는 함수 추가
+		Element.prototype.setStyle = function (styles) {
+			for (var k in styles) this.style[k] = styles[k];
+			return this;
+		};
+
+
+		const categorySet = new Set();
+		const priceSet = new Set();
+		const areaSet = new Set();
+		const guSet = new Set();
+		const dongSet = new Set();
+
+		function categoryButton(btn) {
+			if (btn.classList.contains('clicked')) {
+				btn.classList.remove('clicked');
+				categorySet.delete(btn.value);
+				console.log(categorySet.size);
+				categorySet.forEach(function (value) {
+					console.log(value);
+				});
+
+			} else {
+				btn.classList.add('clicked');
+				categorySet.add(btn.value);
+				console.log(categorySet.size);
+				categorySet.forEach(function (value) {
+					console.log(value);
+				});
+			}
+		}
+
+		function priceButton(btn) {
+			if (btn.classList.contains('clicked')) {
+				btn.classList.remove('clicked');
+				priceSet.delete(btn.value);
+				console.log(priceSet.size);
+				priceSet.forEach(function (value) {
+					console.log(value);
+				});
+
+			} else {
+				btn.classList.add('clicked');
+				priceSet.add(btn.value);
+				console.log(priceSet.size);
+				priceSet.forEach(function (value) {
+					console.log(value);
+				});
+			}
+		}
+
+		function areaButton(btn) {
+			if (btn.classList.contains('clicked')) {
+				btn.classList.remove('clicked');
+				areaSet.forEach(function (value) {
+					console.log(value);
+				});
+				document.getElementById("gu").innerHTML = '';
+				document.getElementById("dong").innerHTML = '';
+			} else {
+				btn.classList.add('clicked');
+				areaSet.forEach(function (value) {
+					console.log(value);
+				});
+				const responseElement = document.getElementById('gu');
+				if (responseElement) {
+					responseElement.innerHTML = '';
+				}
+				url = "[[@{/request/area}]]";
+				params = {areaValue: btn.value};
+				const allBtn = document.createElement('button');
+				allBtn.classList.add('gu-button');
+				allBtn.classList.add('btn');
+				allBtn.classList.add('btn-light');
+				allBtn.onclick = function () {guButton(allBtn);};
+				allBtn.innerText = "전체";
+				responseElement.appendChild(allBtn);
+
+				$.get(url, params, function (response) {
+					response.forEach(function (area) {
+						const areaButton2 = document.createElement('button');
+						areaButton2.classList.add('gu-button');
+						areaButton2.classList.add('btn');
+						areaButton2.classList.add('btn-light');
+						areaButton2.onclick = function () {guButton(areaButton2);};
+						areaButton2.value = area.id;
+						areaButton2.innerText = area.name;
+						responseElement.appendChild(areaButton2);
+					});
+				});
+
+			}
+		}
+
+
+		function guButton(btn) {
+			if (btn.classList.contains('clicked')) {
+				btn.classList.remove('clicked');
+				if (btn.innerHTML == "전체") {
+					areaSet.delete(document.getElementById('si').value);
+					var buttons = document.querySelectorAll('.gu-button');
+					buttons.forEach(function (button) {
+						if (button.innerHTML != "전체") {
+							button.classList.remove('clicked');
+						}
+					});
+				} else if (btn.innerHTML != "전체") {
+					var allButton = document.querySelectorAll('.gu-button');
+					allButton.forEach(function (button) {
+						if (button.innerHTML == "전체") {
+							button.classList.remove('clicked');
+						}
+					});
+				}
+				areaSet.forEach(function (value) {
+					console.log(value);
+				});
+				document.getElementById("dong").innerHTML = '';
+			} else {
+				btn.classList.add('clicked');
+				if (btn.innerHTML == "전체") {
+					areaSet.add(document.getElementById('si').value);
+					areaSet.forEach(function (value) {
+						console.log(value);
+					});
+					var buttons = document.querySelectorAll('.gu-button');
+					buttons.forEach(function (button) {
+						if (button.innerHTML != "전체") {
+
+							button.classList.add('clicked');
+						}
+					});
+				} else {
+					btn.classList.add('clicked');
+					console.log(btn.innerHTML);
+					var allButton = document.querySelector('.gu-button[innerHTML="전체"]');
+					if (allButton && allButton.classList.contains('clicked')) {
+						allButton.classList.remove('clicked');
+					}
+					url = "[[@{/request/area}]]";
+					params = {areaValue: btn.value};
+
+					const responseElement = document.getElementById('dong');
+					if (responseElement) {
+						responseElement.innerHTML = '';
+					}
+					const allBtn = document.createElement('button');
+					allBtn.classList.add('dong-button');
+					allBtn.classList.add('btn');
+					allBtn.classList.add('btn-light');
+					allBtn.onclick = function () {dongButton(allBtn);};
+					allBtn.innerText = "전체";
+					allBtn.value = btn.value;
+					responseElement.appendChild(allBtn);
+
+					$.get(url, params, function (response) {
+						response.forEach(function (area) {
+							const areaButton2 = document.createElement('button');
+							areaButton2.classList.add('dong-button');
+							areaButton2.classList.add('btn');
+							areaButton2.classList.add('btn-light');
+							areaButton2.onclick = function () {dongButton(areaButton2);};
+							areaButton2.value = area.id;
+							areaButton2.innerText = area.name;
+							responseElement.appendChild(areaButton2);
+						});
+
+					});
+				}
+			}
+		}
+
+		function dongButton(btn) {
+			if (btn.classList.contains('clicked')) {
+				btn.classList.remove('clicked');
+				if (btn.innerHTML == "전체") {
+					guSet.delete(btn.value);
+					var buttons = document.querySelectorAll('.dong-button');
+					buttons.forEach(function (button) {
+						if (button.innerHTML != "전체") {
+							button.classList.remove('clicked');
+						}
+					});
+				} else if (btn.innerHTML != "전체") {
+					dongSet.delete(btn.value);
+					var allButton = document.querySelectorAll('.dong-button');
+					allButton.forEach(function (button) {
+						if (button.innerHTML == "전체") {
+							button.classList.remove('clicked');
+						}
+					});
+				}
+			} else {
+				btn.classList.add('clicked');
+				if (btn.innerHTML == "전체") {
+					guSet.add(btn.value);
+					guSet.forEach(function (value) {
+						console.log(value);
+					});
+					var buttons2 = document.querySelectorAll('.dong-button');
+					buttons2.forEach(function (button) {
+						dongSet.delete(button.value);
+						if (button.innerHTML != "전체") {
+							button.classList.add('clicked');
+						}
+					});
+				} else {
+					dongSet.add(btn.value);
+
+					dongSet.forEach(function (button) {
+						console.log(button);
+					})
+					guSet.forEach(function (value) {
+						console.log(value);
+					})
+					var allButton2 = document.querySelector('.dong-button[innerHTML="전체"]');
+					if (allButton2 && allButton2.classList.contains('clicked')) {
+						allButton2.classList.remove('clicked');
+						guSet.delete(btn.value);
+					}
+				}
+			}
+		}
+
+		function resetModal() {
+			const categoryButtons = document.querySelectorAll('#my_modal .form-check-button');
+			const priceButtons = document.querySelectorAll('#my_modal .form-check-button');
+			const areaButtons = document.querySelectorAll('#my_modal .form-check-button');
+			const guButtons = document.querySelectorAll('#my_modal .gu-button');
+			const dongButtons = document.querySelectorAll('#my_modal .dong-button');
+
+			guButtons.forEach(function (btn) {
+				btn.classList.remove('clicked');
+			});
+			dongButtons.forEach(function (btn) {
+				btn.classList.remove('clicked');
+			});
+
+			categoryButtons.forEach(function (btn) {
+				btn.classList.remove('clicked');
+			});
+			priceButtons.forEach(function (btn) {
+				btn.classList.remove('clicked');
+			});
+			areaButtons.forEach(function (btn) {
+				btn.classList.remove('clicked');
+			});
+			categorySet.clear();
+			priceSet.clear();
+			areaSet.clear();
+		}
+		function sendData() {
+			const categoryArray = Array.from(categorySet);
+			const priceArray = Array.from(priceSet);
+			const areaArray = Array.from(areaSet);
+			const guArray = Array.from(guSet);
+			const dongArray = Array.from(dongSet);
+			const searchQuery = document.getElementsByName('searchQuery')[0].value;
+			const filterId = document.getElementById('filterId').value;
+			const sortingId = document.getElementById('sorting').value;
+			const csrfValue = document.getElementsByName('_csrf')[0].value;
+
+			const url = "[[@{/search}]]";
+			const data = {
+				categoryList: categoryArray,
+				priceList: priceArray,
+				areaList: areaArray,
+				guList: guArray,
+				dongList: dongArray,
+				searchQuery: searchQuery,
+				sortingId: sortingId,
+				filterId: filterId
+			};
+
+			$.post({
+				url: url,
+				data: JSON.stringify(data),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader("X-CSRF-Token", csrfValue);
+				},
+				success: function (response) {
+					updateRestaurantList(response);
+				},
+				error: function (e) {
+					console.error(e);
+				}
+			});
+		}
+
+		function updateRestaurantList(list) {
+			const restaurantListDiv = document.getElementsByClassName("full-boxer")[0];
+			restaurantListDiv.innerHTML = '';
+
+			list.forEach(restaurant => {
+				const commentBox = document.createElement('div');
+				commentBox.setAttribute('class', 'comment-box');
+				commentBox.setAttribute('data-url', '/FoodTable/restaurant/' + restaurant.id);
+				commentBox.innerHTML = `
+            <div class="box-top">
+                <div class="Profile">
+                    <div class="profile-image">
+                        <img src="/FoodTable/restaurant-photos/${restaurant.id}/restaurant-Img/${restaurant.imagePathList}">
+                    </div>
+                </div>
+            </div>
+            <div class="Name">
+                <strong>${restaurant.name}</strong>
+                <strong>
+                    별점 : <img src="img/rating/star.png">${restaurant.totalScore}
+                </strong>
+            </div>
+            <div class="comment">
+                <span>
+                    <i class="fa-solid fa-location-dot"></i> ${restaurant.address}
+                </span>
+                <span>
+                    <i class="fa-solid fa-phone"></i> ${restaurant.phone}
+                </span>
+                <span>
+                    <i class="fa-solid fa-calendar-days"></i> ${restaurant.openCloseTimes}
+                </span>
+            </div>
+        `;
+				commentBox.addEventListener('click', () => {
+					const url = commentBox.getAttribute('data-url');
+					window.location.href = url;
+				});
+
+				restaurantListDiv.appendChild(commentBox);
+			});
+		}
+	</script>
+
+	<div th:replace="fragments/footer	 :: WaEating_footer"></div>
+</body>
+
+</html>

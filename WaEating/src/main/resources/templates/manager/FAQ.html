@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+</head>
+<script>
+
+
+	$(document).ready(function () {
+
+		$('.faq-header').click(function () {
+			index = $(this).attr("faqindex");
+			childId = "#content" + index;
+			childDOM = $(childId);
+			childClass = childDOM.prop("class");
+			i = $(this).find('span').find('i');
+			if (childClass == "faq-body") {
+				childDOM.prop("class", "faq-body show-tr");
+				i.attr("class", "fa-solid fa-caret-up")
+			} else {
+				childDOM.prop("class", "faq-body");
+				i.attr("class", "fa-solid fa-caret-down")
+			}
+
+		})
+
+		$('.head-table-td').click(function () {
+
+			URL = $(this).attr("href");
+			window.location.href = URL;
+		})
+
+		console.log($('#head-table').find('tr').find('td'));
+
+		$('#new-register-btn').click(function (event) {
+			event.preventDefault();
+			const form = $(this).closest('form');
+			const url = form.attr("action") + "/createForm";
+			$('#faq-search-keyword').prop('disabled', true);
+			form.attr("action", url);
+			form.submit();
+
+		})
+
+		$('.ud-button').click(function (event) {
+			event.preventDefault();
+			value = $(this).attr("value");
+			form = $(this).closest('form');
+			url = form.attr("action")
+			$('#faq-id-input').val(value);
+			if ($(this).hasClass("faq-update-button")) {
+				url = url.replace("delete", "updateForm");
+				form.attr("method", "get");
+				$("input[name='_csrf']").prop("disabled", true);
+			}
+
+			url = url + "/" + value;
+			form.attr("action", url);
+			form.submit();
+		})
+
+		$('.button-td').click(function (e) {
+			e.stopPropagation();
+		})
+
+	})
+
+</script>
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+	#left {
+		background-color: palegreen;
+		width: 10%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 0;
+	}
+
+	#right {
+		background-color: white;
+		width: 90%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 10%;
+		overflow: scroll;
+	}
+
+
+
+	.faq-body {
+		display: none;
+
+
+
+	}
+
+	.col-2-td {
+		background-color: #F8F8F8;
+		border-bottom: 1px solid;
+		border: solid 1px lightgray;
+	}
+
+	.show-tr {
+		display: contents;
+
+	}
+
+	tr {
+		border-bottom: 1px solid;
+	}
+
+	table {
+		width: 80%;
+		margin: 0 auto;
+	}
+
+	td {
+		padding: 2%;
+	}
+
+	th {
+		padding: 2%;
+	}
+
+	thead {
+		text-align: center;
+	}
+
+	.icon-right-span {
+		float: right;
+	}
+
+	.right-td {
+		width: 65%;
+
+	}
+
+	.left-td {
+		width: 15%;
+		text-align: center;
+	}
+
+	.button-td {
+		width: 10%;
+		text-align: center;
+	}
+
+	.faq-body-content-div {
+		margin-left: 15%;
+		padding: 0 2%;
+
+		clear: both;
+	}
+
+	.faq-body-content-main {
+		padding-top: 2%;
+	}
+
+	#page-number {
+		margin-top: 1%;
+		display: flex;
+		justify-content: center;
+	}
+
+	#head-table {
+		margin: 2% auto;
+		width: 60%;
+	}
+
+	.head-table-td {
+		width: 33.33%;
+		text-align: center;
+	}
+
+	.selected-td {
+		font-weight: bold;
+		border-bottom: solid 3px;
+
+	}
+
+	.faq-header {
+		border-bottom: solid 1px lightgray;
+	}
+
+	#search-wrap {
+		margin-top: 3%;
+		width: 80%;
+		margin: 3% auto 1%;
+		position: relative;
+		border: 1px solid #DDDDDD;
+		border-radius: 4px;
+		background: #F8F8F8;
+		padding: 2%;
+		clear: both;
+		overflow: auto;
+		height: 102px;
+	}
+
+	input[type="text"] {
+		width: 70%;
+		margin-right: 2%;
+		border: 1px solid #DDD;
+		padding: 0.7%;
+		border-radius: 5px;
+		float: left;
+	}
+
+	.head-button {
+		border-radius: 3px;
+		width: 10%;
+		padding: 1.2% 0.7% 0.7% 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		float: left;
+		margin-right: 2%;
+
+	}
+
+	.ud-button {
+		border-radius: 3px;
+		padding: 3%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+		width: 90px;
+		height: 35px;
+
+
+	}
+
+	#more-info {
+		float: right;
+		font-size: 5%;
+		margin-top: 0.25%;
+	}
+
+	body::-webkit-scrollbar {
+		display: none;
+	}
+
+	#no-search-list {
+		width: 60%;
+		margin: 7% auto 0;
+		text-align: center;
+	}
+
+	#new-register-btn {
+		float: right;
+
+	}
+
+	.my-question-i {
+		margin-right: 1%;
+	}
+
+	/*페이징*/
+
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item.active .page-link {
+		border: 2px solid #574343;
+		background: white;
+		color: black;
+	}
+
+	.page-link:hover {
+		color: rgb(90, 85, 78);
+	}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+</style>
+
+<body>
+
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_managerpage:: WaEating_sider_managerpage">
+
+			</ul>
+		</div>
+		<div class="test">
+			<div id="search-wrap">
+				<form th:action="@{/manager/faq}" method="get">
+					<input id="faq-search-keyword" type="text" name="keyword" th:value="${keyword}" /> <button
+						class="head-button"> 검색 </button>
+					<button id="new-register-btn" class="head-button"> 신규 FAQ 등록 </button>
+				</form>
+			</div>
+			<div>
+				<form th:action="@{/manager/faq/delete}" method="post">
+					<table>
+						<thead>
+							<tr>
+								<th>구분</th>
+								<th>질문</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<th:block th:each="faq ,index: ${FAQ.FAQList}">
+								<tr th:faqindex="${index.index}" class="faq-header">
+									<td th:text="${faq.categoryName}" class="left-td"></td>
+									<td class="right-td"><i
+											class="fa-regular fa-circle-question my-question-i"></i>[[${faq.title}]]
+										<span class="icon-right-span"><i class="fa-solid fa-caret-down"></i></span>
+									</td>
+									<td class="button-td">
+										<button th:value="${faq.id}" class="ud-button faq-update-button">수정</button>
+									</td>
+									<td class="button-td">
+										<button th:value="${faq.id}" class="ud-button">삭제</button>
+									</td>
+								</tr>
+								<tr th:id="|content${index.index}|" class="faq-body">
+
+									<td class="col-2-td" th:attr="colspan=4">
+										<div class="faq-body-content">
+
+											<div class="faq-body-content-div"><i class="fa-solid fa-a"></i> <br>
+												<div th:utext="${faq.content}" class="faq-body-content-main"></div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</form>
+				<div id="no-search-list" th:if="${FAQ.FAQList.isEmpty()}">
+					<i class="fa-solid fa-magnifying-glass fa-4x"></i><br><br>
+					<b>등록된 FAQ항목이 없습니다.</b>
+				</div>
+
+				<div th:if="${!(FAQ.pageList.size()==1 AND FAQ.pageList.get(0) == 1)}" id="page-number">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item" th:if="${FAQ.prevIsEnabled}"><a class="page-link"
+									th:href="|@{/manager/faq?page=${FAQ.pageList.get(0)-2}}|">Prev</a></li>
+							<li th:class="${page==FAQ.currentPage? 'page-item active':'page-item'}"
+								th:each="page: ${FAQ.pageList}">
+								<a class="page-link" th:text="${page}" th:href="|@{/manager/faq?page=}${page-1}|"></a>
+							</li>
+							<li class="page-item" th:if="${FAQ.nextIsEnabled}"><a class="page-link"
+									th:href="|@{/manager/faq?page=${FAQ.pageList.get(4)}}|">Next</a></li>
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+
+		</div>
+
+</body>
+
+</html>

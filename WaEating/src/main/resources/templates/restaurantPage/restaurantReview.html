@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header::WaEating_head" />
+
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minumum-scale=1.0">
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+</head>
+<script type="text/javascript">
+	function deleteOwnerReview(ownerReviewId, restaurantId) {
+		if (confirm("정말 댓글을 삭제하시겠습니까?")) {
+			window.location.href = '/FoodTable/restaurant-page/delete/' + ownerReviewId;
+		}
+	}
+
+	function addOwnerReview(ownerReviewId, restaurantId) {
+		if (confirm("댓글을 등록하시겠습니까?")) {
+			window.location.href = '/FoodTable/restaurant-page/add/' + ownerReviewId;
+		}
+	}
+
+</script>
+<style>
+	.box-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+
+	.comment-box:hover {
+		margin-top: 12px;
+	}
+
+	.comment-box {
+		width: 1000px;
+		background: white;
+		padding: 20px;
+		margin: 15px;
+		border-radius: 8px;
+		cursor: pointer;
+		box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3);
+	}
+
+	.Profile {
+		display: flex;
+		align-items: center;
+	}
+
+	.profile-image {
+		width: 70px;
+		height: 70px;
+		box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.3);
+		overflow: hidden;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
+
+	.profile-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.Name {
+		display: grid;
+		margin-left: 2%;
+		width: 90%;
+		font-size: 20px;
+	}
+
+	.Name strong {
+		color: black;
+		font-size: 18px;
+	}
+
+	.Name span {
+		color: gray;
+		margin-top: 2px;
+	}
+
+	.comment {
+		font-family: ui-sans-serif;
+		color: black;
+		font-size: 25px;
+		font-weight: normal;
+	}
+
+	.ownerReview {
+		background: #ededed;
+		width: 800px;
+		margin-left: 21%;
+	}
+
+	.ownerAddReview {
+		background: #ededed;
+		width: 800px;
+		margin-left: 21%;
+	}
+
+	.reviewBox {
+		display: grid;
+		margin: 0 auto;
+		width: 100%;
+		justify-content: center;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+
+
+
+	textarea {
+		border: none;
+		resize: none;
+	}
+
+	#test {
+		display: grid;
+		margin: 3% auto;
+		overflow: scroll;
+	}
+
+	#restaurantTopBtn {
+		display: flex;
+		justify-content: end;
+	}
+
+
+
+	.fa-chevron-left, .fa-chevron-right {
+		color: #000000a3;
+	}
+
+	.menu22Rating {
+		width: 10%;
+		margin: 0 0 10px 0;
+		padding: 3px;
+	}
+
+	.ownerCommentBtnContainer {
+		float: right;
+	}
+
+	#restaurantReviewNav {
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	/* 페이징 */
+
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item .page-link.active {
+		border: 2px solid #574343;
+	}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+</style>
+<script>
+	// 리뷰가 안달려있으면 버튼을 통해 리뷰다는 창 보여지게됨
+	$(document).ready(function () {
+		$('.review-viewer').click(function () {
+			reviewId = $(this).attr("reviewid");
+			selector = "#ownerComment" + reviewId;
+			console.log(selector);
+			if ($(selector).css("display") == "block") {
+				$(selector).hide();
+			} else {
+				$(selector).show();
+			}
+		});
+	});
+
+
+	$(document).ready(function () {
+		$('.review-edit').click(function () {
+			reviewId = $(this).attr("reviewEditid");
+			ownerReview = "#ownerReview" + reviewId;
+			ownerComment = "#ownerComment" + reviewId;
+			console.log(ownerReview);
+			$(ownerReview).hide();
+			$(ownerComment).show();
+		});
+	});
+
+
+	$(document).ready(function () {
+		$('.review-cancle').click(function () {
+			reviewId = $(this).attr("reviewCancleid");
+			ownerReview = "#ownerReview" + reviewId;
+			ownerComment = "#ownerComment" + reviewId;
+			console.log(ownerReview);
+			$(ownerReview).show();
+			$(ownerComment).hide();
+		});
+	});
+
+
+	// 리뷰 수정을 눌렀을 때 
+
+
+
+
+
+	//
+	const textarea = document.querySelector('[data-review-id]');
+	const value = textarea.value;
+	const replaced = value.replace(/\n/g, "<br>");
+	textarea.innerHTML = replaced;
+
+
+
+	const editReviewButtons = document.querySelectorAll(".edit-review-button[data-review-id='" + reviewId + "']");
+	editReviewButtons.forEach(button => {
+		button.addEventListener("click", () => {
+			const reviewId = button.dataset.reviewId;
+			editReview(reviewId);
+		});
+	});
+
+	function editReview(reviewId) {
+		const reviewContent = document.getElementById("review-content" + reviewId);
+		const pre = reviewContent.querySelector("pre");
+		const textarea = document.createElement("textarea");
+		textarea.value = pre.textContent;
+		reviewContent.replaceChild(textarea, pre);
+	}
+
+</script>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+			</ul>
+		</div>
+		<div id="test">
+			<div id="restaurantReviewNav">
+				<h2><i class="fa-sharp fa-solid fa-pen-to-square"></i> 리뷰관리</h2>
+				<hr style="width: 100%;">
+				<div id="restaurantTopBtn">
+					<form id="getAllBtn" th:action="@{/restaurant-page/reviewList}" method="get">
+						<input type="hidden" name="select" th:value="getAllReview" />
+						<button type="submit" class="btn btn-light"> 전체 댓글</button>
+					</form>
+					<form id="getReviewWihtOwnerCommentBtn" th:action="@{/restaurant-page/reviewList}" method="get">
+						<input type="hidden" name="select" th:value="getReviewWihtOwnerComment" />
+						<button type="submit" class="btn btn-light">나의 댓글</button>
+					</form>
+				</div>
+				<hr style="width: 100%;">
+				<h5 style="margin-left: 80%;">[[${getSize}]]</h5>
+			</div>
+			<div class="reviewBox" th:each="review : ${reviewList}">
+				<!--유저 댓글-->
+				<div class="comment-box">
+					<div class="box-top">
+						<div class="Profile">
+							<div class="profile-image">
+								<img th:src="@{/img/user.png}">
+							</div>
+							<div class="Name">
+								[[${review.reservationInfo.member.name}]] 님
+								<div class="rating">
+									총점 : [[${review.score.totalScore}]]
+									<img class="menu22Rating" th:if="${review.score.totalScore <0.5}"
+										th:src="@{/img/rating/0.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.totalScore>=0.5 AND review.score.totalScore <1.5}"
+										th:src="@{/img/rating/1.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.totalScore>=1.5 AND review.score.totalScore <2.5}"
+										th:src="@{/img/rating/2.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.totalScore>=2.5 AND review.score.totalScore <3.5}"
+										th:src="@{/img/rating/3.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.totalScore>=3.5 AND review.score.totalScore <4.5}"
+										th:src="@{/img/rating/4.png}">
+									<img class="menu22Rating" th:if="${review.score.totalScore>=4.5 }"
+										th:src="@{/img/rating/5.png}">
+
+									맛 점수 : [[${review.score.tasteScore}]]
+
+									<img class="menu22Rating" th:if="${review.score.tasteScore <0.5}"
+										th:src="@{/img/rating/0.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.tasteScore>=0.5 AND review.score.tasteScore <1.5}"
+										th:src="@{/img/rating/1.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.tasteScore>=1.5 AND review.score.tasteScore <2.5}"
+										th:src="@{/img/rating/2.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.tasteScore>=2.5 AND review.score.tasteScore <3.5}"
+										th:src="@{/img/rating/3.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.tasteScore>=3.5 AND review.score.tasteScore <4.5}"
+										th:src="@{/img/rating/4.png}">
+									<img class="menu22Rating" th:if="${review.score.tasteScore>=4.5 }"
+										th:src="@{/img/rating/5.png}">
+
+									서비스 점수 : [[${review.score.serviceScore}]]
+
+
+									<img class="menu22Rating" th:if="${review.score.serviceScore <0.5}"
+										th:src="@{/img/rating/0.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.serviceScore>=0.5 AND review.score.serviceScore <1.5}"
+										th:src="@{/img/rating/1.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.serviceScore>=1.5 AND review.score.serviceScore <2.5}"
+										th:src="@{/img/rating/2.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.serviceScore>=2.5 AND review.score.serviceScore <3.5}"
+										th:src="@{/img/rating/3.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.serviceScore>=3.5 AND review.score.serviceScore <4.5}"
+										th:src="@{/img/rating/4.png}">
+									<img class="menu22Rating" th:if="${review.score.serviceScore>=4.5 }"
+										th:src="@{/img/rating/5.png}">
+
+									가격 점수 : [[${review.score.priceScore}]]
+
+									<img class="menu22Rating" th:if="${review.score.priceScore <0.5}"
+										th:src="@{/img/rating/0.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.priceScore>=0.5 AND review.score.priceScore <1.5}"
+										th:src="@{/img/rating/1.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.priceScore>=1.5 AND review.score.priceScore <2.5}"
+										th:src="@{/img/rating/2.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.priceScore>=2.5 AND review.score.priceScore <3.5}"
+										th:src="@{/img/rating/3.png}">
+									<img class="menu22Rating"
+										th:if="${review.score.priceScore>=3.5 AND review.score.priceScore <4.5}"
+										th:src="@{/img/rating/4.png}">
+									<img class="menu22Rating" th:if="${review.score.priceScore>=4.5 }"
+										th:src="@{/img/rating/5.png}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="comment">
+						<p>
+						<pre class="userComment" th:utext="${review.content}"></pre>
+						</p>
+						<div th:unless="${review.ownerComment != null}">
+							<button th:id="'getReview' + ${review.id}" class="btn btn-light review-viewer"
+								th:reviewid="${review.id}">댓글달기</button>
+						</div>
+					</div>
+				</div>
+				<!--사장 댓글 있으면 보임-->
+				<div class="comment-box ownerReview" th:if="${review.ownerComment != null}"
+					th:id="|ownerReview${review.id}|">
+					<div class="box-top">
+						<div class="Profile">
+							<div class="profile-image">
+								<img th:src="@{/img/chef.png}">
+							</div>
+							<strong style="padding: 10px;">사장님</strong>
+						</div>
+					</div>
+					<div class="comment" th:data-review-id="'review-content' + ${review.id}">
+						<pre th:utext="${review.ownerComment.content}"></pre>
+					</div>
+					<div class="ownerCommentBtnContainer">
+						<button class="deleteBtn btn btn-light"
+							th:onclick="'deleteOwnerReview(' + ${review.ownerComment.id} + ')'">
+							댓글 삭제
+						</button>
+						<button class="btn btn-light review-edit" th:id="|editComment${review.id}|"
+							th:reviewEditid="${review.id}">댓글 수정</button>
+					</div>
+				</div>
+				<!--사장 댓글 없으면 달기 클릭시 보임-->
+				<div th:id="|ownerComment${review.id}|" class="comment-box ownerAddReview"
+					style="display: none; height: 82%;">
+					<form th:action="@{|/restaurant-page/add/${review.id}|}" method="get" th:object="${ownerComment}">
+						<input type="hidden" th:value="${review.id}" name="review.id" />
+						<div class="box-top" style="display: grid;">
+							<div class="comment">
+								<textarea
+									onKeyup="var a=100; var b=this.scrollHeight;if(b>=a)this.style.pixelHeight=b+1"
+									cols=64 rows=5 name="content" th:data-review-id="${review.id}"></textarea>
+							</div>
+							<div style="display: flex; justify-content: end;">
+								<button class="btn btn-light" type="submit" style="margin-right: 10px;">등록</button>
+								<button class="btn btn-danger review-cancle" th:id="|editComment${review.id}|"
+									th:reviewCancleid="${review.id}">취소
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="pagination">
+				<ul class="pagination">
+					<li class="page-item" th:class="${reviewList.first} ? disabled : ''">
+						<a class="page-link" th:href="@{|?page=${reviewList.number <= 1 ? '1' : reviewList.number}|}"><i
+								class="fa-sharp fa-solid fa-chevron-left"></i></a>
+					</li>
+					<li class="page-item " th:each="i : ${#numbers.sequence(0, reviewList.totalPages-1)}">
+						<a class="page-link btn btn-link" th:href="@{|?page=${i+1}|}" th:text="${i+1}"
+							th:classappend="${i == reviewList.number} ? 'active' : ''"></a>
+					</li>
+					<li class="page-item" th:class="${reviewList.last} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{|?page=${reviewList.number+1 == reviewList.totalPages ? reviewList.totalPages : reviewList.number+2}|}">
+							<i class="fa-sharp fa-solid fa-chevron-right"></i></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+
+</html>

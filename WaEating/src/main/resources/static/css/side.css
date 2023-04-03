@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+
+* {
+	list-style: none;
+	text-decoration: none;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+.table {
+	width: 90%;
+	margin: 0 auto;
+}
+
+th {
+	font-size: 1.5pc;
+}
+
+td {
+	font-size: 1.1pc;
+}
+
+.sideWrapper {
+	width: 100%;
+	display: flex;
+
+	box-sizing: border-box;
+	height: 800px;
+}
+
+.sideWrapper .sidebar {
+	width: 12%;
+	background: #333333;
+}
+
+.sideWrapper .sidebar h2 {
+	color: #fff;
+	text-transform: uppercase;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.sideWrapper .sidebar ul {
+    display: grid;
+    justify-content: center;
+}
+
+.sideWrapper .sidebar ul li {
+	padding: 35px 15px;
+	border-bottom: 1px solid #bdbdbf;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sideWrapper .sidebar ul li a {
+	color: #bdbdbf;
+	text-decoration: none;
+}
+
+.sideWrapper .sidebar ul li a .fas {
+	width: 25px;
+}
+
+.sideWrapper .sidebar ul li:hover a {
+	color: #fff;
+}
+
+.sideWrapper .main_content {
+	overflow: scroll;
+	margin-top: 2%;
+	padding: 2%;
+}
+
+::-webkit-scrollbar {
+	display: none;
+}
+
+.sideWrapper .main_content_header {
+	margin-left: 5%;
+}
+
+.sideWrapper .main_content_header2 {
+	margin: 1% 0 1% 5%;
+}
+
+.test {
+	display: grid;
+	justify-content: inherit;
+	width: 88%;
+	overflow: scroll;
+}
+
+.main_content .table i {
+	font-size: 20px;
+}
+
+#tableReview {
+	display: flex;
+	justify-content: space-around;
+}
+
+hr {
+	margin: 2% auto;
+	width: 90%;
+}

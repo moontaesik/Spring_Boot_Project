@@ -1,0 +1,262 @@
+	<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+	<head>
+	
+		<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+		<title>Reservation foodTable</title>
+	
+		<head th:replace="fragments/header::WaEating_head" />
+	
+		<head th:replace="fragments/footer::WaEating_foot" />
+		<link rel="stylesheet" th:href="@{/css/side.css}">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/js/common.js}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	
+	</head>
+	<script>
+	
+	
+	
+		$(document).ready(function () {
+	
+			datass = {
+				totalChart: null,
+				priceChart: null,
+				serviceChart: null,
+				tasteChart: null,
+	
+			}
+	
+	
+	
+			url = "[[@{/restaurant-page/graph/6}]]";
+			$.get(url, function (response) {
+				console.log(response);
+	
+				totalResponse = response.total;
+				priceResponse = response.price;
+				serviceResponse = response.service;
+				tasteResponse = response.taste;
+				drawCanvas("totalChart", totalResponse, $('#myTotalChart'));
+				drawCanvas("priceChart", priceResponse, $('#myPriceChart'));
+				drawCanvas("serviceChart", serviceResponse, $('#myServiceChart'));
+				drawCanvas("tasteChart", tasteResponse, $('#myTasteChart'));
+			})
+	
+			$(document).on('click','.select-term-btn:not(.clicked-btn)',function(){
+				
+				clickedBtn = $(this);
+				term = $(this).val();
+	
+				url = "[[@{/restaurant-page/graph/}]]" + term;
+	
+				console.log(url);
+	
+				$.get(url, function (response) {
+	
+					totalResponse = response.total;
+					priceResponse = response.price;
+					serviceResponse = response.service;
+					tasteResponse = response.taste;
+	
+					changeCanvasData("totalChart", totalResponse, $('#myTotalChart'));
+					changeCanvasData("priceChart", priceResponse, $('#myPriceChart'));
+					changeCanvasData("serviceChart", serviceResponse, $('#myServiceChart'));
+					changeCanvasData("tasteChart", tasteResponse, $('#myTasteChart'));
+					
+					$('.clicked-btn').removeClass('clicked-btn');
+					clickedBtn.addClass('clicked-btn');
+				})
+			})
+	
+			$('#graph-data-request').click(function () {
+	
+				console.log("zz : " + datass);
+	
+				period = $('#select-period').val();
+				term = $('#select-term').val();
+	
+				url = "[[@{/restaurant-page/graph/}]]" + term;
+	
+				console.log(url);
+	
+				$.get(url, function (response) {
+	
+					totalResponse = response.total;
+					priceResponse = response.price;
+					serviceResponse = response.service;
+					tasteResponse = response.taste;
+	
+					changeCanvasData("totalChart", totalResponse, $('#myTotalChart'));
+					changeCanvasData("priceChart", priceResponse, $('#myPriceChart'));
+					changeCanvasData("serviceChart", serviceResponse, $('#myServiceChart'));
+					changeCanvasData("tasteChart", tasteResponse, $('#myTasteChart'));
+	
+				})
+	
+			})
+			function changeCanvasData(chartName, response, canvasDom) {
+	
+				datass[chartName].destroy()
+				drawCanvas(chartName, response, canvasDom)
+			}
+			function drawCanvas(chartName, response, canvasDom) {
+				data = response.data;
+				label = response.label;
+				title = response.title;
+				canvas = canvasDom;
+				datass[chartName] = new Chart(canvas, {
+					type: 'line',
+					data: {
+						labels: label,
+						datasets: [{
+							label: title,
+							data: data,
+							fill: false,
+							backgroundColor: 'rgba(255, 255, 255, 0)',
+							borderColor: '#333333',
+							borderWidth: 2
+						}]
+					},
+					options: {
+						scales: {
+							y: {
+								beginAtZero: true,
+								stepSize: 1,
+								suggestedMin: 0,
+								suggestedMax: 5,
+	
+							}
+						},
+						maintainAspectRatio: false
+					}
+				});
+				console.log(datass[chartName]);
+	
+			}
+		})
+	</script>
+	
+	<style>
+		html,
+		body {
+			height: 100%;
+			clear: both;
+		}
+	
+	
+		.graph-div {
+			width: 50%;
+			height: 50%;
+			float: left;
+		}
+	
+		#asd {
+			display: block;
+		}
+	
+	
+	
+		.graph-location {
+			width: 70%;
+			height: 70%;
+			margin: 15px auto;
+		}
+	
+		.graph-title {
+			text-align: center;
+			margin: 30px auto;
+			font-weight: 800;
+		}
+	
+		#graph-total {
+			width: 90%;
+			margin: 0 auto;
+			margin-top: 60px;
+		}
+	
+		.graph-bundle {
+			display: flex;
+		}
+	
+		.clicked-btn {
+	
+			background-color: #ffd93ec2;
+			color: #ffffff;
+			border: none;
+			font-weight: 700;
+		}
+	
+		.select-term-btn {
+			padding: 0.5% 1.5%;
+			border-radius: 5px;
+			border: none;
+			margin-right:10px;
+		}
+		#btn-div{
+			margin-left : 150px;
+		}
+	</style>
+	
+	<body>
+	
+		<div th:replace="fragments/header:: WaEating_header"></div>
+		<div class="sideWrapper">
+			<div class="sidebar">
+					<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+			
+			</ul>
+			</div>
+			<div class="test" id="asd">
+				<div id="graph-total">
+					<div id="btn-div">
+						<button class="select-term-btn clicked-btn" value="6">6개월</button>
+						<button class="select-term-btn" value="9">9개월</button>
+						<button class="select-term-btn" value="12">12개월</button>
+						
+					</div>
+					
+					<div class="graph-bundle">
+						<div class="graph-div">
+							<div class="graph-title">총합 별점 그래프</div>
+							<div class="graph-location">
+								<canvas id="myTotalChart"></canvas>
+							</div>
+						</div>
+						<div class="graph-div">
+							<div class="graph-title">가격 별점 그래프</div>
+							<div class="graph-location">
+								<canvas id="myPriceChart"></canvas>
+							</div>
+						</div>
+					</div>
+					<div class="graph-bundle">
+						<div class="graph-div">
+							<div class="graph-title">맛 별점 그래프</div>
+							<div class="graph-location">
+								<canvas id="myTasteChart"></canvas>
+							</div>
+						</div>
+						<div class="graph-div">
+							<div class="graph-title">서비스 별점 그래프</div>
+							<div class="graph-location">
+								<canvas id="myServiceChart"></canvas>
+							</div>
+						</div>
+					</div>
+	
+				</div>
+			</div>
+		</div>
+		<div th:replace="fragments/footer:: WaEating_footer"></div>
+	
+	</body>
+	
+	</html>

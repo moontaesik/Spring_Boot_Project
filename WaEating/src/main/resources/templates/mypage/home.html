@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/header::WaEating_head" />
+
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+
+	$(document).ready(function () {
+
+		$('.modify-btn').click(function () {
+			var form = $(this).closest('form');
+			let action = form.attr("action");
+			action = action.replace("cancel", "modify");
+			form.attr("action", action);
+			form.submit();
+		})
+	})
+</script>
+<style>
+	th {
+		background-color: #333333;
+		padding: 0.75rem;
+		color: white;
+	}
+
+	td {
+		width: 18%;
+		padding: 0.75rem;
+		font-size: 1.3pc;
+	}
+
+	table {
+		border: 1px solid #dee2e6;
+		width: 90%;
+		margin: 0 auto;
+		background-color: rgb(254 251 251);
+
+	}
+
+	.main_content_header {
+		display: grid;
+
+	}
+
+	#myPageInfo {
+		display: flex;
+		justify-content: space-evenly;
+		float: left;
+		width: 50%;
+	}
+
+	.myPageInt {
+		display: flex;
+	}
+
+	.myPageInt ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.myPageInt ul li {
+		margin: 0px 7px 0 9px;
+		padding: 0 0 0 0;
+		border: 0;
+		font-size: large;
+		font-family: initial;
+		font-weight: 500;
+	}
+
+	.hash {
+		pointer-events: none;
+		background-color: #aead8730;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<!--side-->
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_mypage:: WaEating_sider_mypage">
+
+			</ul>
+		</div>
+		<div class="test">
+			<div class="main_content">
+				<h1 style="margin-left: 5%;"><i class="fa-solid fa-circle-info"></i> 기본정보</h1>
+				<hr>
+				<div id="myPageInfo">
+					<div>
+						<h4><i class="fa-solid fa-user-pen"></i> [[${member.name}]]</h3>
+							<h4><i class="fa-solid fa-mobile-screen-button" style="margin-top: 1%;"></i></i>
+								[[${member.phone}]]</h3>
+					</div>
+
+				</div>
+				<div class="myPageInt">
+					<h4 style="width: 240px;"><i class="fa-solid fa-map-location-dot"></i> 관심 지역 </h4>
+					<ul th:each="memberinar: ${memberInar}">
+						<li class="hash btn btn-light" th:text="'#' + ${memberinar.area.name}" disabled></li>
+					</ul>
+				</div>
+				<div class="myPageInt">
+					<h4 style="width: 240px;"><i class="fa-solid fa-table-list"></i> 관심 카테고리 </h4>
+					<ul th:each="memberinca: ${memberInca}">
+						<li class="hash btn btn-light" th:text="'#' +${memberinca.category.name}"></li>
+					</ul>
+				</div>
+
+
+				<hr>
+				<div>
+					<h1 style="text-align: center;">현재 예약목록</h1>
+					<hr>
+				</div>
+				<div th:if="${#lists.isEmpty(reservation)}" class="text-center" style="margin-top: 2%;">
+					<h4>현재 예약 정보가 없습니다.</h4>
+				</div>
+				<table th:if="${!#lists.isEmpty(reservation)}" class="table table-bordered text-center"
+					style="margin-top: 2%;">
+					<thead class="thead-dark">
+						<tr>
+							<th>Restaurant</th>
+							<th>Time</th>
+							<th>People</th>
+							<th>Amount</th>
+							<th>Reservation</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reser: ${reservation}">
+							<td>[[${reser.restaurantName}]]</td>
+							<td>[[${reser.reservationDate()}]]</td>
+							<td>[[${reser.bookPeople}]]</td>
+							<td>[[${reser.amount}]]</td>
+							<td>
+								<div id="tableReview">
+									<form th:action="@{|/restaurant/reservation/${reser.id}/cancel|}" method="post">
+
+										<button class="modify-btn btn btn-light" th:reservationid="${reser.id}"><i
+												class="fa-solid fa-calendar-days fa-2x"></i>주문 수정</button> |
+										<button class="btn btn-light"><i
+												class="fa-solid fa-calendar-xmark fa-2x "></i>예약 취소</button>
+									</form>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

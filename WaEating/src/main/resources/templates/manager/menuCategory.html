@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+</head>
+<script>
+	$(document).ready(function(){
+		
+		
+		selectedDiv=[]
+		$('#reset').click(function(){
+			selectedDiv=[];
+			$('#order-show').html('');
+			$.each($('.selectCategory'),function(){
+				
+				$(this).removeClass('selectCategory');
+			})
+		})
+		
+		$('#modify-btn').click(function(){
+			
+			if($(this).text()=='변경'){
+				$(this).text('취소')
+				
+				$('#reset').css('display','inline-block');
+				$('#reg-btn').css('display','none');
+				$('.menu-category').click(function(){
+					
+					
+					if(!$(this).hasClass('selectCategory')){
+						
+						if($('#order-show').html().trim() !== ''){
+						
+							$('#order-show').append($("<i></i>").addClass("fa-solid fa-arrow-right my-arrow"));
+						}
+						//더해주는 부분
+						select = $("<div>").addClass("select").text($(this).children('.right-category').text());
+						$('#order-show').append(select);
+						selectedDiv.push($(this));
+						$(this).addClass('selectCategory')
+					}
+					
+					
+					
+				})
+				
+				$('#confirm-btn').click(function(){
+					
+					if($('.menu-category').length != $('.selectCategory').length){
+						
+						alert('전부 선택해야 카테고리의 순서가 변경됩니다.')
+						return;
+					}else{
+						
+						selectedDiv.forEach(function(e){
+						console.log($(e));
+						$('<input>').attr({
+   							type: 'text',
+    						name: 'menuIds[]',
+    						value: $(e).attr("categoryid")
+  						}).appendTo($('#orderForm'));
+						
+						console.log($(e).attr("categoryid"))
+					})
+					
+					$('#orderForm').submit();
+					}
+					
+				})
+				
+			}else{
+				
+				$('#reset').css('display','none');
+				$(this).text('변경')
+				$('#reg-btn').css('display','inline-block');
+				$('.menu-category').off('click');
+				selectedDiv=[];
+				$('#order-show').html('');
+				$.each($('.selectCategory'),function(){
+				$('#confirm-btn').off('click')
+				$(this).removeClass('selectCategory');
+			})
+				
+			}
+			
+		})
+		
+	})
+</script>
+<style>
+	.selectCategory{
+		
+		background-color: rgb(255, 253, 242, 0.9);
+	}
+	#test{
+		display: block;
+	}
+	#test-left{
+		
+		    margin-top: 8%;
+    width: 30%;
+    margin-left: 20%;
+    float: left;
+    height: 60%;
+    border-radius: 10px;
+        box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+	}
+	.menu-category{
+		width:95%;
+ box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+		border-radius: 7px;
+		padding: 10px;
+		margin : 15px auto;
+		height: 10%;
+	}
+	#test-left-top{
+		    margin-top: 8%;
+    width: 30%;
+    margin-left: 1%;
+    float: left;
+    height: 25%;
+    padding : 40px 30px;
+	border-radius: 10px;
+	    box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+	}
+	#test-left-bottom{
+	    margin-top: 1%;
+    width: 30%;
+    margin-left: 1%;
+    float: left;
+    height: 33%;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+	}
+	#regist-btn{
+		
+		border-color: lightgreen;
+		border-width: 3px;
+		width: 18%;
+	}
+	   .btn-light {
+    color: #212529;
+    background-color: rgb(254 251 251);
+    border: 2px solid #d9d1dd !important;
+    width: 18%;
+    border-radius: 25px;
+    margin-bottom: 5px;
+}
+
+   .btn-light:hover{
+    box-shadow: 
+    inset 0 0 0 100px rgb(237, 231, 231);
+    opacity: 1;transform: scale(1);
+}
+.order-div{
+	
+	height: 100%;
+	border: 1px solid;
+}
+.right-category{
+	float: left;
+}
+.left-category{
+	float: left;
+}
+.select{
+	
+padding: 5px 10px;border-radius:3px; float:left;
+box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+    margin-top: 25px;
+    margin-left: 10px;
+}
+.my-arrow{
+	float:left;
+	margin-left: 10px;
+	margin-top: 35px;
+}
+</style>
+
+<body>
+
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_managerpage:: WaEating_sider_managerpage">
+
+			</ul>
+		</div>
+		<div class="test" id="test">
+			<div id="test-left">
+				
+					
+					<th:block th:each="category : ${categoryList}" >
+					<div class="menu-category" th:categoryid="${category.id}">
+					<div th:text="${category.orderNumber+'.'}" class="left-category">
+					</div>
+					<div th:text="${category.name}" class="right-category">
+					</div>
+					</div>
+					</th:block>
+					
+			
+				
+				
+			</div>
+			
+			<div id="test-left-top">
+				<div style="font-weight:700;width:100%;text-align: center; margin-bottom:30px;"> 신규 카테고리 등록 </div>
+			
+					<div>
+						<form th:action="@{/manager/menuCategory/save}" method="post">
+					<b>카테고리명 : </b><input type="text" name="name" style="height: 36px;width: 220px;border-radius:5px;padding-left: 15px;"/>
+					<input type="hidden" name="restaurantId" th:value="${restaurantId}"/>
+					<input type="hidden" name="orderNumber" th:Value="${orderNumber}"/>
+					<button class="btn btn-light" id="reg-btn"> 등록 </button>
+					</form>
+					</div>
+					
+		
+				
+			</div>
+			
+			<div id="test-left-bottom">
+				<div style="font-weight:700;width:100%;text-align: center; margin-bottom:20px;"> 카테고리 순서 변경 </div>
+				<div style="float: left; border-radius: 4px;height: 90px;box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+				 overflow-x: scroll;width: 100%;" id="order-show">
+		
+ 
+					
+					
+				</div>
+				
+				<div style="float:left;width:100%;text-align: center; text-align: center;padding: 20px;border-top: 1px solid lightgray;
+				margin-top:10px"><button id="reset" style="display:none;margin-right:10px">초기화</button><button id="modify-btn">변경</button> <button id='confirm-btn'>확인</button></div>
+			</div>
+		</div>
+	</div>
+	<form th:action="@{/manager/menuCategory/order/save}" method="post" id="orderForm">
+		
+		<input type="hidden" name="restaurantId" th:value="${restaurantId}"/>
+	</form>
+
+</body>
+
+</html>

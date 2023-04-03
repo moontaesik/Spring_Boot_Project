@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</head>
+
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+
+	#left {
+		background-color: palegreen;
+		width: 10%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 0;
+	}
+
+	#right {
+		background-color: lightgray;
+		width: 90%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 10%;
+	}
+
+	#menuCategoryDiv {
+		border: 2px solid #d9d1dd !important;
+		width: 40%;
+		border-radius: 25px;
+		padding: 20px;
+		margin: 0 auto;
+	}
+
+	#menuInfo input {
+		width: 100%;
+	}
+
+	#file-upload {
+		margin-top: 2%;
+	}
+	
+	img{
+		width: 30%;
+	}
+	
+		.btn-light {
+    color: #212529;
+    background-color: rgb(254 251 251);
+    border: 2px solid #d9d1dd !important;
+    width: 12%;
+    border-radius: 25px;
+}
+
+	.btn-light:hover{
+    box-shadow: 
+    inset 0 0 0 100px rgb(237, 231, 231);
+    opacity: 1;transform: scale(1);
+}
+</style>
+
+<body>
+
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_restaurantpage:: WaEating_sider_restaurantpage">
+
+			</ul>
+		</div>
+		<div class="test">
+			<div id="edit-form">
+				<form th:action="@{/manager/menu/save}" method="POST" th:object="${menu}"
+					enctype="multipart/form-data" id="menuForm">
+					<input class="" type="hidden" th:field="*{id}">
+					<input type="hidden" name="restaurantId" th:value="${restaurantId}" />
+					<div id="menuList" style="margin-top: 1%;">
+						<div id="menuInfo">
+							<div id="menuCategoryDiv">
+								<label>메뉴카테고리:</label>
+								<select th:field="*{menuCategory}">
+									<option th:text="${category.name}" th:value="${category.id}" th:each="category:${categoryList}"></option>
+								</select>
+								<br>
+								<label>메뉴명:</label>
+								<input class="form-control" th:field="*{name}" placeholder="메뉴명을 입력해주세요." required />
+								<br>
+								<label>가격:</label>
+								<input class="form-control" th:field="*{price}" placeholder="가격을 입력해주세요. " required />
+								<br>
+								<label>메뉴설명:</label>
+								<input class="form-control" th:field="*{explanation}" placeholder="메뉴설명을 입력해주세요. " />
+								<br>
+								<label>메뉴이미지:</label>
+								<br>
+								<div>
+									<input type="hidden" th:field="*{imagePath}" />
+									<img th:if="${menu.imagePath == null}" id="thumbnail" th:src="@{/img/12.png}"
+										alt="Photos preview" />
+									<img th:if="${menu.imagePath != null}" id="thumbnail"
+										th:src="@{${menu.photosImagePath}}" alt="Photos preview" />
+									<input type="file" class="form-control-file border" name="file" id="file-upload" accept="image/png,image/jpeg">
+									<br><br>
+								</div>
+									<button type="submit" class="btn btn-light" style="width: 100%;">확인</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

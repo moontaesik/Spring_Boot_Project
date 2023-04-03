@@ -1,0 +1,307 @@
+   * {
+   	margin: 0;
+   	padding: 0;
+   	font-family: 'Josefin Sans', sans-serif;
+   }
+
+   .resMain {
+   	display: flex;
+   	flex-direction: column;
+   	align-items: center;
+   	justify-content: center;
+   	width: 100%;
+   	margin-top: 150px;
+   }
+
+   .full-boxer {
+   	display: flex;
+   	flex-wrap: wrap;
+   	justify-content: space-between;
+   	align-items: center;
+   	width: 85%;
+   	box-sizing: border-box;
+   	margin: 0 auto;
+   }
+
+   .box-top {
+   	display: flex;
+   	justify-content: space-between;
+   	align-items: center;
+   	margin-bottom: 20px;
+   }
+
+   .comment-box:hover {
+   	margin-top: 12px;
+   }
+
+   .comment-box {
+   	width: 400px;
+   	background: white;
+   	padding: 3%;
+   	margin: 15px;
+   	border-radius: 8px;
+   	cursor: pointer;
+   	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+   }
+
+   .Profile {
+   	display: flex;
+   	align-items: center;
+   	width: 470px;
+   }
+
+   .profile-image {
+   	width: 100%;
+   	height: 270px;
+   	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+   	overflow: hidden;
+   	border-radius: 1%;
+   	margin-right: 10px;
+   }
+
+   .profile-image img {
+   	width: 100%;
+   	height: 100%;
+   	object-fit: cover;
+   	object-position: center;
+   }
+
+   .Name {
+   	display: flex;
+   	justify-content: space-between;
+   	font-family: sans-serif;
+   	padding: 3%;
+   }
+
+   .Name strong {
+   	color: black;
+   	font-size: 18px;
+   }
+
+   .Name span {
+   	color: gray;
+   	margin-top: 2px;
+   }
+
+   .comment p {
+   	color: black;
+   }
+
+   .comment {
+   	padding: 3%;
+   	display: grid;
+   	justify-content: left;
+   	height: 70px;
+
+   }
+
+   .Name img {
+   	width: 20px;
+   	height: 20px;
+   	margin-bottom: 6%;
+   }
+
+   #search-box {
+   	display: flex;
+   	justify-content: center;
+   	margin: 1% auto;
+   	width: 70%;
+   	z-index: 2;
+   }
+
+   .form-control {
+   	width: 35%;
+   	margin-left: 10px;
+   	height: 50px;
+   }
+
+   .btn {
+   	width: 120px;
+   	height: 50px;
+   }
+
+   #searchBtn {
+   	margin-left: 10px;
+   }
+
+   #searchBox-sentence {
+   	text-align: center;
+   	display: grid;
+   	justify-content: center;
+   	color: white;
+   	font-weight: 500;
+   }
+
+   #sb {
+   	position: relative;
+   	padding: 6%;
+   	background-color: transparent;
+   	background-image: url('../img/mainBanner/res1.jpg');
+   	height: 400px;
+   	margin-top: 5%;
+   }
+
+   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+   .modal_cancle_btn {
+   	font-size: larger;
+   	font-weight: 700;
+   	border: solid 2px #a19c9c;
+   	background-color: #a19c9c;
+   	color: white;
+   	height: 50px;
+   	width: 50%;
+   }
+
+   .modal_sort_btn {
+   	font-size: larger;
+   	font-weight: 700;
+   	border: solid 2px #f8ba38;
+   	background-color: #f8ba38;
+   	color: white;
+   	height: 50px;
+   	width: 50%;
+   }
+
+   .modalName {
+   	float: left;
+   	background: white;
+   	height: 35%;
+   	font-size: x-large;
+   	font-weight: 500;
+   	margin: 5% 0 0 4%;
+   }
+
+   #modalCat {
+   	background: white;
+   	width: 100%;
+   	height: 100%;
+   	display: grid;
+   	height: 30%;
+   }
+
+   #modalprice {
+   	background: white;
+   	width: 100%;
+   	height: 100%;
+   	display: grid;
+   	height: 30%;
+   }
+
+   #modalReg {
+   	background: white;
+   	width: 100%;
+   	height: 100%;
+   	display: grid;
+   	height: 30%;
+   }
+
+   .modalInner {
+   	margin: 0 auto;
+   }
+
+   .modal_btn {
+   	display: flex;
+   	justify-content: center;
+   	margin-top: 5%;
+   }
+
+   #my_modal .clicked {
+   	border: solid 2px #f8ba38;
+   	text-decoration: none;
+   }
+
+   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+
+   #my_modal {
+   	display: none;
+   	width: 60%;
+   	height: 80%;
+   	background-color: #fefefe;
+   	border: 1px solid #888;
+   	border-radius: 30px;
+   	overflow: scroll;
+   }
+
+   #my_modal::-webkit-scrollbar {
+   	display: none;
+   }
+
+   #my_modal .modal_close_btn {
+   	position: absolute;
+   	top: 10px;
+   	right: 10px;
+   }
+
+   #guDiv {
+   	display: flex;
+   }
+
+   .gu-button {
+   	margin: 2%;
+   }
+
+   #dongDiv {
+   	display: flex;
+   }
+
+   .dong-button {
+   	margin: 2%;
+   }
+
+   #dong {
+   	width: 100%;
+   }
+
+   btn {
+   	border: none;
+   }
+
+   .botline {
+   	display: '';
+   }
+
+   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+   #restaurantList {
+   	margin: 3% 20% 0 20%;
+   }
+
+   #restaurantList #restaurant {
+   	width: 20%;
+   	height: auto;
+   	background-color: gray;
+   	float: left;
+   	margin-right: 15px;
+   	margin-bottom: 15px;
+   	border: 1px solid black;
+   }
+
+   select {
+   	font-size: 16px;
+   	font-weight: bold;
+   	color: #444;
+   	margin-left: 3px;
+   	border-radius: 5px;
+   	border: 1px solid black;
+   	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+   	background-color: #fff;
+   	background-image: linear-gradient(45deg, transparent 50%, #444 50%),
+   		linear-gradient(135deg, #444 50%, transparent 50%),
+   		linear-gradient(to right, #ccc, #ccc);
+   	background-position: calc(100% - 20px) calc(1em + 2px),
+   		calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+   	background-size: 5px 5px, 5px 5px, 1px 1.5em;
+   	background-repeat: no-repeat;
+   	-webkit-appearance: none;
+   	-moz-appearance: none;
+   	appearance: none;
+   }
+
+   select:focus {
+   	outline: none;
+   }
+
+   select option {
+   	font-weight: normal;
+   }

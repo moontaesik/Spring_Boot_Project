@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.htymeleaf.org">
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+	<script type="text/javascript">
+		/* 첫번째 분기 : 휴대전화로 이름확인 */
+		function checkIdExist1(form) {
+			url = "[[@{/login/check_idExist1}]]";
+
+			memberPhone = $("#phone").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			params = {phone: memberPhone, _csrf: csrfValue};
+
+			$.post(url, params, function (response) {
+				if (response == "noPhone") {
+					showModalDialog1("", "일치하는 정보가 없습니다")
+				} else {
+					showModalDialog1("", "이름을 입력해주세요");
+					$("#checkForm").css("display", "");
+					$("#phoneSubmit").css("display", "none");
+				}
+			}).fail(function () {
+				showModalDialog1("에러", "Could not connect to the server");
+			});
+			return false;
+		}
+
+		/* 두번째 분기 : 휴대전화와 이름으로 아이디확인 */
+		function checkIdExist2(form) {
+			url = "[[@{/login/check_idExist2}]]";
+
+			memberName = $("#name").val();
+			memberPhone = $("#phone").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			params = {name: memberName, phone: memberPhone, _csrf: csrfValue};
+
+			$.post(url, params, function (response) {
+				if (response == "noName") {
+					showModalDialog("", "일치하는 정보가 없습니다.")
+				} else if (response == "noPhone") {
+					showModalDialog("Warning", "일치하는 정보가 없습니다.");
+				} else if (response == "noNamePhone") {
+					showModalDialog("Warning", "일치하는 정보가 없습니다.");
+				} else {
+					showModalDialog("인증완료", "아이디 : " + response);
+				}
+			}).fail(function () {
+				showModalDialog("Error", "Could not connect to the server");
+			});
+			return false;
+		}
+
+
+		function showModalDialog1(title, message) {
+			$("#modalTitle1").text(title);
+			$("#modalBody1").text(message);
+			$("#modalDialog1").modal();
+		}
+
+		function showModalDialog(title, message) {
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialog").modal();
+		}		
+	</script>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="wrapper">
+		<div class="title">
+			아이디 찾기
+		</div>
+		<form th:action="@{/login}" method="post" onsubmit="return checkIdExist1(this)">
+			<div class="field">
+				<input type="text" name="phone" id="phone" required>
+				<label>전화번호</label>
+			</div>
+			<!-- 폰번호 조회확인되면 -->
+			<div class="field" id="phoneSubmit">
+				<input type="submit" value="조회하기">
+			</div>
+		</form>
+		<form th:action="@{/login}" method="post" onsubmit="return checkIdExist2(this)" style="display: none;"
+			id="checkForm">
+			<div class="field">
+				<input type="text" name="userId" id="name" required>
+				<label>이름</label>
+			</div>
+			<div class="content">
+				<div class="pass-link">
+					<a th:href="@{/member/find/pw}">비밀번호 찾기</a>
+				</div>
+			</div>
+			<div class="field">
+				<input type="submit" value="조회하기">
+			</div>
+			<div class="signup-link">
+				회원이 아니십니까? <a th:href="@{/member/join}">회원가입</a>
+			</div>
+		</form>
+	</div>
+
+	<!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!---->
+
+<!--이름확인 모달창-->
+	<div class="modal fade text-center" id="modalDialog1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalTitle1"></h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="modalBody1"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--아이디 찾기 모달창-->
+	<div class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalTitle"></h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="modalBody"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-light" data-dismiss="modal"
+						th:onclick="|window.location.href='@{/login}'|">로그인페이지로 이동</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

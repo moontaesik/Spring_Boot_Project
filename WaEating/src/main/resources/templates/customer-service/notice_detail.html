@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+		<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+</head>
+<script>
+
+	$(document).ready(function () {
+
+		$('.head-table-td').click(function () {
+
+			URL = $(this).attr("href");
+			if(URL=='1'){
+				alert("유저만 이용 가능합니다.")
+				return;
+			}
+			window.location.href = URL;
+		})
+		
+
+		$('.right-td').click(function () {
+
+			MoveURL = $(this).attr("url");
+			window.location.href = MoveURL;
+		})
+
+		$('.move-tr').click(function () {
+			page = $(this).attr("page");
+			URL = "[[@{/customer-service/noticeList/}]]" + page;
+			window.location.href = URL;
+		})
+
+	})
+
+
+</script>
+
+
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+
+	.faq-body {
+		display: none;
+
+
+
+	}
+
+	.col-2-td {
+		background-color: #f8f8f8;
+		border-bottom: 1px solid;
+	}
+
+	.show-tr {
+		display: contents;
+
+	}
+
+	tr {
+		border-bottom: 1px solid;
+	}
+
+	table {
+		width: 70%;
+		margin: 0 auto;
+	}
+
+	td {
+		padding: 2%;
+	}
+
+	th {
+		padding: 2%;
+	}
+
+	thead {
+		text-align: center;
+	}
+
+	.icon-right-span {
+		float: right;
+	}
+
+	.right-td {
+		width: 75%;
+
+	}
+
+	.left-td {
+		width: 25%;
+		text-align: center;
+	}
+
+	.faq-body-content-div {
+		margin-left: 25%;
+		padding: 0 2%;
+		;
+		clear: both;
+	}
+
+	.faq-body-content-main {
+		padding-top: 2%;
+	}
+
+	#page-number {
+		margin-top: 1%;
+		display: flex;
+		justify-content: center;
+	}
+
+	#head-table {
+		margin: 2% auto;
+		width: 70%;
+	}
+
+	.head-table-td {
+		width: 33.33%;
+		text-align: center;
+	}
+
+	.selected-td {
+		font-weight: bold;
+		border-bottom: solid 3px;
+
+	}
+
+	#search-wrap {
+		width: 60%;
+		margin: 0 auto;
+		position: relative;
+		border: 1px solid #DDDDDD;
+		border-radius: 4px;
+		background: #F8F8F8;
+		padding: 2%;
+		clear: both;
+		overflow: auto;
+
+	}
+
+	#more-info {
+		float: right;
+		font-size: 5%;
+		margin-top: 0.25%;
+	}
+
+	select {
+		float: left;
+		padding: 0.75%;
+		border-radius: 3px;
+		margin-right: 2%;
+
+	}
+
+
+	#view-count-span {
+		float: right;
+		margin-left: 10%;
+	}
+
+	#view-register-span {
+		float: right;
+	}
+
+	#sub-data-td {
+		background-color: #f8f8f8;
+	}
+
+	#main-data-td {
+		padding: 5%;
+	}
+
+	.text-span {
+		margin-right: 1%;
+	}
+
+	.left-right-p5-td {
+		padding: 2% 5%;
+	}
+
+	.left-m5-span {
+		margin-left: 5%;
+	}
+
+	#btn-goto-list {
+		border-radius: 3px;
+		width: 90%;
+		padding: 6%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+		margin: 0 auto 20px;
+
+	}
+
+	#button-wrapper {
+		margin: 2% auto 0;
+		width: 12%;
+		overflow: auto;
+		display: flex;
+		justify-content: center;
+	}
+
+	body::-webkit-scrollbar {
+		display: none;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<table id="head-table">
+		<tr>
+		<td th:class="${head==1 ? 'head-table-td selected-td' : 'head-table-td'}"
+				th:href="@{/customer-service/index}">FAQ</td>
+			<td th:class="${head==2 ? 'head-table-td selected-td' : 'head-table-td'}"
+				th:href="@{/customer-service/noticeList}">공지사항</td>
+			<td sec:authorize="isAnonymous()||hasRole('ROLE_USER')" th:class="${head==3 ? 'head-table-td selected-td' : 'head-table-td'}"
+				th:href="@{/customer-service/oneToOne}">1:1문의</td>
+			<td sec:authorize="hasRole('ROLE_OWNER')||hasRole('ROLE_ADMIN')" th:class="${head==3 ? 'head-table-td selected-td' : 'head-table-td'}"
+				th:href="1">1:1문의</td>
+		</tr>
+	</table>
+
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th th:text="${notice.get('current').title}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="sub-data-td">
+					<td>
+						<span id="view-count-span" th:text="|조회수 : ${notice.get('current').viewCount}|"></span>
+						<span id="view-register-span" th:text="|등록일 : ${notice.get('current').registerDate}|"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="main-data-td" th:utext="${notice.get('current').ContentWithEnter()}"></td>
+
+				</tr>
+				<tr th:page="${notice.get('next')!=null ?notice.get('next').id : 0}"
+					th:class="${notice.get('next')!=null ? 'move-tr' :'no-move-tr'}">
+					<td class="left-right-p5-td">
+						<span class="text-span">다음글</span><i class="fa-solid fa-angle-up"></i>
+						<span class="left-m5-span" th:text="${notice.get('next')!=null ? notice.get('next').title
+					: '다음 글이 없습니다.'}"></span>
+					</td>
+
+				</tr>
+				<tr th:page="${notice.get('previous')!=null ?notice.get('previous').id : 0}"
+					th:class="${notice.get('previous')!=null ? 'move-tr':'no-move-tr'	}">
+					<td class="left-right-p5-td">
+						<span class="text-span">이전글</span><i class="fa-solid fa-angle-down"></i>
+						<span class="left-m5-span" th:text="${notice.get('previous')!=null ? notice.get('previous').title
+					: '이전 글이 없습니다.'}"></span>
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+		<div id="button-wrapper">
+			<button id="btn-goto-list" th:onclick="|window.location = '@{/customer-service/noticeList}'|">목록</button>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

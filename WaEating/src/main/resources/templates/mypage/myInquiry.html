@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />
+<head>
+   <link rel="stylesheet" th:href="@{/css/side.css}">
+   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+	$(document).ready(function () {
+		$('.mid-td').click(function () {
+			MoveURL = $(this).attr("url");
+		   	window.location.href = MoveURL;
+		})
+		const dropdown = $('option');
+		console.log(dropdown);
+		for (let i = 0; i < dropdown.length; i++) {
+			if (dropdown[i].value == "[[${target}]]") {
+            	dropdown[i].selected = true;
+            }
+		}
+	})
+</script>
+
+<style>
+	#search-wrap {
+      width: 50%;
+      position: relative;
+      border: 1px solid #DDDDDD;
+      border-radius: 4px;
+      background: #F8F8F8;
+      padding: 1%;
+      clear: both;
+      overflow: auto;
+      margin-bottom: -1%;
+   }
+   
+   select {
+      float: left;
+      padding: 0.75%;
+      border-radius: 3px;
+      margin-right: 2%;
+   }
+   
+   input[type="text"] {
+      width: 60%;
+      margin-right: 2%;
+      border: 1px solid #DDD;
+      padding: 0.7%;
+      border-radius: 5px;
+      float: left;
+   }
+   
+   #inquiry-search-button {
+      border-radius: 3px;
+      width: 10%;
+      padding: 1.2% 0.7% 0.7% 0.7%;
+      border-width: thin;
+      font-size: 82%;
+      font-weight: bold;
+      background-color: #414141;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      float: left;
+      margin-right: 2%;
+   }
+   
+	.state-button{
+	   	background-color: #414141;
+	   	color: white;
+	   	border-width: thin;
+    	    padding: 8%;
+    width: 84px;
+	    border-radius: 21px;
+	    margin-right: 5px;
+   	}
+   	
+   	#no-search-list {
+      width: 60%;
+      margin: 7% auto 0;
+      text-align: center;
+   }
+   /*페이징*/
+
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item.active .page-link{
+		border: 2px solid #574343;
+		background: white;
+		color: black;
+	}
+	.page-link:hover {
+		color: rgb(90, 85, 78);
+		}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+	
+	#page-number{
+		margin: 2% auto;
+	    display: grid;
+	    justify-content: center;
+	}
+
+	#btnTop{
+	    display: flex;
+	    justify-content: end;
+	    margin: 0 5% 10px 0;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+
+   <!--side-->
+   	<div class="sideWrapper">
+      	<div class="sidebar">
+         	<ul th:replace="fragments/side_mypage:: WaEating_sider_mypage">
+
+         	</ul>
+      	</div>
+      	<div class="test">
+         	<div class="main_content">
+				<div class="main_content_header" style="display: inline-block; margin-right: 2%;">
+	         		<h1>내 문의 조회</h1>
+	         	</div>
+           		<div id="search-wrap" style="display: inline-block; margin-right: 2%; width: 71%;">
+		            <form th:action="@{/mypage/inquiry}" method="get">
+		               <select name="target">
+		                  <option value="1">제목</option>
+		                  <option value="2">내용</option>
+		                  <option value="3">제목 + 내용</option>
+		                  <option value="4">상태</option>
+		               </select>
+		               <input type="text" name="keyword" th:value="${keyword}" style="width: 71%;"/><button id="inquiry-search-button"> 검색</button>
+		            </form>
+		        </div>	        
+		        <hr>
+	    			<div id="btnTop">
+	    		        <a th:href="@{/mypage/inquiry(keyword=WAITING,target=4)}"><button class="state-button">대기중</button></a>
+	        			<a th:href="@{/mypage/inquiry(keyword=COMPLETED,target=4)}"><button class="state-button">답변완료</button></a>
+	    				<a th:href="@{/mypage/inquiry}"><button class="state-button">모든리뷰</button></a>
+	    			</div>
+            	<div th:if="${#lists.isEmpty(inquiry)}" class="text-center">
+               		<h4>현재 문의 정보가 없습니다.</h4>
+            	</div>
+            	<table th:if="${!#lists.isEmpty(inquiry)}" class="table table-bordered text-center">
+               		<thead class="thead-dark">
+                  		<tr>
+							<th>번호</th>
+                     		<th>
+								답변
+							 </th>
+                     		<th>Category</th>
+                     		<th>Title</th>
+                  		</tr>
+               		</thead>
+               		<tbody>
+						<th:block th:each="in ,index: ${inquiry.oneList}">
+	                  		<tr th:faqindex="${index.index}">
+						  		<td th:text="${in.id}"></td>
+	                     		<td th:text="${in.state}"></td>
+	                     		<td th:text="${in.categoryName}"></td>
+	                     		<td class="mid-td" th:url="|@{/mypage/inquiry/}${in.id}|">[[${in.title}]]</td>
+	                  		</tr>
+						</th:block>
+               		</tbody>
+            	</table>
+            	<div id="no-search-list" th:if="${inquiry.oneList.isEmpty()}">
+					<i class="fa-solid fa-magnifying-glass fa-4x"></i><br><br>
+					<b th:text="${keyword==''?'등록된 문의사항이 없습니다.':'검색결과가 없습니다.'}"></b>
+				</div>
+				
+				<div th:if="${!(inquiry.pageList.size()==1 AND inquiry.pageList.get(0) == 1)}" id="page-number">
+	               <nav aria-label="Page navigation example">
+	                  <ul class="pagination">
+	                     <li class="page-item" th:if="${inquiry.prevIsEnabled}"><a class="page-link"
+	                           th:href="|@{/mypage/inquiry?page=}${inquiry.pageList.get(0)-2}|">Prev</a>
+	                     </li>
+	                     <li th:class="${page==inquiry.currentPage? 'page-item active':'page-item'}"
+	                        th:each="page: ${inquiry.pageList}">
+	                        <a class="page-link" th:text="${page}"
+	                           th:href="|@{/mypage/inquiry?page=}${page-1}|"></a>
+	                     </li>
+	                     <li class="page-item" th:if="${inquiry.nextIsEnabled}"><a class="page-link"
+	                           th:href="|@{/mypage/inquiry?page=}${inquiry.pageList.get(4)}|">Next</a></li>
+	                  </ul>
+	               </nav>
+	            </div>
+	            
+         	</div>
+      	</div>
+   	</div>
+   	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+</html>

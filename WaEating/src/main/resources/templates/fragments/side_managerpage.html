@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+   
+   <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+
+</head>
+
+<body>
+
+
+
+       <ul th:fragment="WaEating_sider_managerpage">
+      <li><a th:href="@{/manager/faq}"><i class="fas fa-user"></i>FAQ</a></li>
+      <li><a th:href=@{/manager/notice}><i class="fas fa-address-card"></i>공지사항</a></li>
+      <li><a th:href=@{/manager/oneToOne}><i class="fas fa-address-card"></i>1:1 문의</a></li>
+		<li><a th:href="@{/manager/banner}"><i class="fa-solid fa-heart"></i> 배너 관리</a></li>
+		<li><a th:href="@{/manager/restaurant}"><i class="fa-solid fa-heart"></i> 가게 관리</a></li>
+    
+	
+</ul>
+
+
+    
+</body>
+
+</html>

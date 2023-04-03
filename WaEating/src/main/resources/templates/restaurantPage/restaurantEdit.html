@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+	#faq-create-form {
+		width: 80%;
+		margin: 3% auto;
+	}
+
+	#faq-create-table {
+		width: 100%;
+	}
+
+	#button-wrapper {
+		display: flex;
+		justify-content: right;
+		margin: 2% 2% 0 0;
+	}
+
+	td {
+		padding: 2%;
+		border-bottom: solid 1px lightgray;
+	}
+
+	#h4-FAQ-title {
+		font-weight: 900;
+	}
+
+	#btn-confirm {
+		border-radius: 3px;
+		width: 10%;
+		padding: 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+	}
+
+	#btn-cancel {
+
+		border-radius: 3px;
+		width: 10%;
+		padding: 0.7%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #ffffff;
+		margin: 0 1%;
+	}
+
+	#timebtn {
+		margin-right: 10px;
+		margin-bottom: 5px;
+		width: 60px;
+		text-align: center;
+	}
+
+	.click {
+		border: solid 2px #beaf90;
+		text-decoration: none;
+	}
+
+	#restaurantMenuList {
+		display: flex;
+		justify-content: space-between;
+		width: 88%;
+		margin: 0 auto;
+	}
+
+	#restaurantInfo {
+		margin: 0 auto;
+	}
+
+	#restaurantInfo1 {
+		box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+		margin-left: 3%;
+	}
+
+	#restaurantInfo2 {
+		box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+		margin-left: 3%;
+		padding: 2%;
+		width: 42%;
+		position: absolute;
+	}
+
+	#restaurantInfo3 {
+		box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+		margin-right: 11%;
+		width: 27%;
+		padding: 15px;
+		position: static;
+		float: right;
+	}
+
+	#rs {
+		display: flex;
+		justify-content: space-evenly;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	#edit-form {
+		width: 88%;
+	}
+</style>
+
+<body>
+
+
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+			<div class="sidebar">
+					<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+			
+			</ul>
+			</div>
+		<br><br>
+		<div id="edit-form">
+			<form th:action="${restaurantEdit?.restaurant?.id == null} ? @{/manager/save} : @{/manager/update}"
+				method="post" th:object="${restaurantEdit}" enctype="multipart/form-data"
+				onsubmit="return checkAddress(this)" id="restaurantForm">
+				<div id="hiddenInputContainer"><input type="hidden" th:field="*{restaurant.id}" id="restaurantId" />
+				</div>
+				<hr style="width: 100%; margin-bottom:2%;">
+				<div id="rs">
+					<h2><i class="fa-sharp fa-solid fa-shop"></i></i>식당등록</h2>
+
+				</div>
+				<div id="restaurantMenuList">
+					<div id="restaurantInfo">
+						<hr style="width: 100%; margin-bottom:3%;">
+						<div id="restaurantInfo2">
+							<label for="category">식당카테고리:</label>
+							<select th:field="*{category}" required>
+								<option value="0" selected>==선택==</option>
+								<option value="1">한식</option>
+								<option value="2">중식</option>
+								<option value="3">양식</option>
+								<option value="4">일식</option>
+							</select>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label for="priceRange">가격대:</label>
+							<select th:field="*{priceRange}" required>
+								<option value="0" selected>==선택==</option>
+								<option value="만원대">만원대</option>
+								<option value="이만원대">이만원대</option>
+								<option value="삼만원대">삼만원대</option>
+								<option value="오만원대">오만원대</option>
+								<option value="십만원대">십만원대</option>
+							</select>
+							<hr style="width: 100%;">
+							<label for="restaurant">식당명:</label>
+							<input style="width: 80%;" th:field="*{restaurant.name}" placeholder="가게 이름을 입력해주세요."
+								required />
+							<hr style="width: 100%;">
+
+
+
+							<label for="startTime">오픈시간:</label>
+							<input type="time" th:field="*{openTime}" />
+
+
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label for="closeTime">마감시간:</label>
+							<input type="time" th:field="*{closeTime}" />
+
+							<hr style="width: 100%;">
+							<label for="phone">연락처:</label>
+							<input style="width: 80%;" name="phone" th:field="*{restaurant.phone}"
+								placeholder="연락처를 입력해주세요." required>
+							<hr style="width: 100%;">
+							<label for="maxTable">테이블 수:</label>
+							<input style="width: 76%;" name="maxTable" th:field="*{restaurant.maxTable}"
+								placeholder="테이블 수를 입력해주세요." required>
+							<hr style="width: 100%;">
+							<div th:if="${restaurantEdit.restaurant.id==null}">
+								<label for="address">주소:</label>
+								<input id="address_kakao" name="address" placeholder="주소를 입력해주세요."
+									path="customerAddress" required />
+								&nbsp;
+								<input type="text" id="x" th:field="*{restaurant.x}"/>
+								<input type="text" id="y" th:field="*{restaurant.y}"/>
+								<input style="width: 300px;" th:field="*{restaurant.specificArea}" name="addressDetail"
+									id="addressDetail" placeholder="상세주소를 입력해주세요." onclick="areaSplite()" required>
+							</div>
+							<div th:if="${restaurantEdit.restaurant.id!=null}">
+								<label for="address">가게주소:</label>
+								<label id="address_kakao" name="address">[[${address}]]</label>
+								<label name="addressDetail" id="addressDetail"
+									th:text="${restaurantEdit.restaurant.specificArea}"></label>
+							</div>
+
+						</div>
+						<div id="restaurantInfo3">
+							<label for="time">예약시간설정:</label>
+							<br>
+							<button style="width: 98px; height: 50px;" type="text" onclick="reservationTimeButton(this)"
+								id="timebtn" class="form-check-button btn btn-light"
+								th:each="reservationTime:${defaultTime}"
+								th:classappend="${#lists.contains(myTimes, reservationTime)} ? 'click' ">[[${reservationTime}]]</button>
+							<div id="restaurantInfoBtn">
+								<button class="btn btn-light" type="submit" style="width: 100%; margin-top: 10px;"
+									onclick="checkTimes(event)">확인</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2d0245c4ab62c2d8332d17b53c92a930&libraries=services"></script>
+	<script type="text/javascript">
+
+		var city;
+		var gu;
+		var dong;
+		var fullAddress;
+
+
+
+		function reservationTimeButton(btn) {
+			if (btn.classList.contains('click')) {
+				event.preventDefault()
+				btn.classList.remove('click');
+			} else {
+				event.preventDefault()
+				btn.classList.add('click');
+			}
+		}
+		function resavationTimes() {
+			const form = document.getElementById('restaurantForm');
+			const clickButtons = document.querySelectorAll('.form-check-button.btn.btn-light.click');
+			const hiddenInputContainer = document.getElementById('hiddenInputContainer');
+			clickButtons.forEach(button => {
+				const hiddenInput = document.createElement('input');
+				hiddenInput.type = 'hidden';
+				hiddenInput.name = 'time[]';
+				hiddenInput.value = button.textContent;
+				hiddenInputContainer.appendChild(hiddenInput);
+			});
+			form.appendChild(hiddenInputContainer);
+			const timeInputs = document.querySelectorAll('input[name="time[]"]');
+			timeInputs.forEach(timeInput => {
+				console.log(timeInput.name + ":::" + timeInput.value);
+			});
+		}
+
+
+
+		//카카오 주소API
+		window.onload = function () {
+			document.getElementById("address_kakao").addEventListener("click", function () { //주소입력칸을 클릭하면
+				//카카오 지도 발생
+				new daum.Postcode({
+					oncomplete: function (data) { //선택시 입력값 세팅
+						document.getElementById("address_kakao").value = data.address; // 주소 넣기
+						console.log(data.address);
+					}
+				}).open();
+			});
+		}
+
+ 
+
+		// 카카오 API에서 받아온 주소 값을 시/군/동 으로 짜르는 메서드 
+
+		function areaSplite() {
+			var address = document.getElementById('address_kakao').value;
+			
+			 var geocoder = new kakao.maps.services.Geocoder();
+   
+           geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var lat = result[0].y; // 위도
+                var lng = result[0].x; // 경도
+                // 위도와 경도를 백엔드로 전달하는 코드
+                $('#x').val(lat);
+                $('#y').val(lng);
+   
+                // ...
+            }
+           });
+
+			console.log(address.value);
+			var url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + address;
+
+			fetch(url, {
+				headers: {
+					'Authorization': 'KakaoAK 0fee96ea7f4e44810ce3da58592b7b03' // 절대 손대지마시오!!!!!! 
+				}
+			})
+				.then(response => response.json())
+				.then(data => {
+					var address = data.documents[0].address;
+					city = address.region_1depth_name + "특별시"; // 시/도
+					gu = address.region_2depth_name; // 시/군/구
+					dong = address.region_3depth_name + "동"; // 읍/면/동
+					fullAddress = city + ' ' + gu + ' ' + dong; // 전체 주소
+					console.log(fullAddress);
+					console.log(city);
+					console.log(gu);
+					console.log(dong);
+				})
+				.catch(error => console.log(error));
+		}
+
+
+
+		//파일 썸네일 메서드 및 사이즈 조정
+		$(document).ready(function () {
+			$("#file-upload").change(function () {
+				fileSize = this.files[0].size;
+				if (fileSize > 1048576 * 2) {
+					this.setCustomValidity("You must choose an image less than 2MB!");
+					this.reportValidity();
+				} else {
+					this.setCustomValidity("");
+					showImageThumbnail(this);
+				}
+			});
+		});
+
+		function showImageThumbnail(fileInput) {
+			var file = fileInput.files[0];
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				$("#thumbnail").attr("src", this.result);
+			};
+			reader.readAsDataURL(file);
+		}
+
+		const select = document.getElementById("startMinute");
+		select.required = true;
+
+		select.addEventListener("change", function () {
+			if (select.value === "99") {
+				select.setCustomValidity("분을 선택해주세요.");
+			} else {
+				select.setCustomValidity("");
+			}
+		});
+		function checkTimes(event) {
+
+			event.preventDefault();
+			if ($('#openTime').val() >= $('#closeTime').val()) {
+
+				event.preventDefault();
+				alert("오픈시간이 마감시간보다 늦을 수 없습니다. 다시 작성해 주세요")
+			}
+		}
+		function checkAddress(form) {
+
+			if (document.getElementById("restaurantId").value == "") {
+				console.log(city);
+				console.log(gu);
+				console.log(dong);
+				url = "[[@{/addressCheck}]]";
+				csrfValue = $("input[name='_csrf']").val();
+				data = {
+					city: city,
+					gu: gu,
+					dong: dong,
+				};
+				$.post({
+					url: url,
+					data: JSON.stringify(data),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader("X-CSRF-Token", csrfValue);
+					},
+					success: function (response) {
+						console.log(response.length);
+						if (response.length == 3) {
+							const restaurantInfo = document.getElementById('restaurantInfo');
+							response.forEach(function (list) {
+								const areaInput = document.createElement('input');
+								areaInput.value = list;
+								areaInput.type = "hidden";
+								areaInput.name = "area[]";
+								restaurantInfo.appendChild(areaInput);
+								console.log(list);
+							})
+							resavationTimes();
+							form.submit();
+						}
+					}, error: function (e) {
+						console.error(e);
+					}
+				});
+			} else {
+				resavationTimes();
+				form.submit();
+			}
+			return false;
+		}
+	</script>
+
+</body>
+
+</html>

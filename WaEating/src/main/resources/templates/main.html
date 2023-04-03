@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<html lang="en">
+
+<head th:replace="fragments/header::WaEating_head" />
+
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head th:replace="fragments/mainSwiper :: mainSwiper_head" />
+<meta charset="utf-8" />
+<title>Swiper demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+
+<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+</head>
+<script>
+		$(document).ready(function(){
+		
+		$('.move-card').click(function(){
+			
+			url = $(this).attr("url");
+			window.location.href = url;
+			console.log(url);
+		})
+	})
+	
+
+	console.log('감자')
+	console.error('에러');
+	
+	
+</script>
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div th:replace="fragments/mainSwiper::mainSwiper_body"></div>
+	<div id="mainBody">
+		<div class="swiper mySwiper">
+			<h2 class="cardTitle">[[${highScoreResTitle}]]</h2>
+			<div class="slide-container swiper">
+				<hr>
+				<div class="slide-content" id="card1">
+					<div class="card-wrapper swiper-wrapper">
+						<div class="card swiper-slide move-card" th:each="res, iterStat: ${highScoreRes}" th:url="|@{/restaurant/}${res.getId}|">
+                        <div class="card-image">
+                              <div th:classappend="${iterStat.index < 3} ? 'rankWordContainer' : ''">
+                                  <span class="rankWord" th:text="${iterStat.index == 0 ? 'TOP1' : iterStat.index == 1 ? 'TOP2' : iterStat.index == 2 ? 'TOP3' : ''} "></span>
+                              </div>
+                        	<img th:src="@{${res.photosImagePath}}" alt="" class="card-img">
+                       </div>   	
+							<div class="card-content">
+								<div class="card-content2">
+									<span class="name" th:text="${res.getResName}" />
+									<!--예약수<span class="name" th:text="${res.getCountRv}" />-->
+									<!--인덱스<span class="ranking" th:text="${iterStat.index}" />-->
+								</div>
+								<span class="description1"
+									th:text="${res.getSi} + ' ' + ${res.getGun} + ' ' + ${res.getDong}" />
+								<span th:if="${res.getTotalScore >= 4}" class="resScore" style="color: orange;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 4 && 2 <= res.getTotalScore}" class="resScore"
+									style="color: black;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 2}" class="resScore" style="color: grey;">
+									평점 : <img th:src="@{/img/rating/star.png}">[[${res.getTotalScore}]]
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<th:block th:if="${highScoreRes.size() > 5}">
+				<div class="swiper-button-next main swiper-navBtn nb" id="nb1"></div>
+				<div class="swiper-button-prev main swiper-navBtn pb" id="pb1"></div>
+				<div class="swiper-pagination"></div>
+			</th:block>
+		</div>
+		<div class="swiper mySwiper">
+			<h2 class="cardTitle">[[${orderByReviewInMonthTitle}]]</h2>
+			<div class="slide-container swiper">
+				<hr>
+				<div class="slide-content" id="card2">
+					<div class="card-wrapper swiper-wrapper">
+						<div class="card swiper-slide move-card" th:each="res, iterStat: ${orderByReviewInMonth}" th:url="|@{/restaurant/}${res.getId}|">
+                        <div class="card-image">
+                              <div th:classappend="${iterStat.index < 3} ? 'rankWordContainer' : ''">
+                                  <span class="rankWord" th:text="${iterStat.index == 0 ? 'TOP1' : iterStat.index == 1 ? 'TOP2' : iterStat.index == 2 ? 'TOP3' : ''} "></span>
+                              </div>
+                          <img th:src="@{${res.photosImagePath}}" alt="" class="card-img">
+                        </div>   	
+							<div class="card-content">
+								<div class="card-content2">
+									<span class="name" th:text="${res.getResName}" />									
+									
+								</div>
+								<span class="description1"
+									th:text="${res.getSi} + ' ' + ${res.getGun} + ' ' + ${res.getDong}" />
+								<span th:if="${res.getTotalScore >= 4}" class="resScore" style="color: orange;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 4 && 2 <= res.getTotalScore}" class="resScore"
+									style="color: black;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 2}" class="resScore" style="color: grey;">
+									평점 : <img th:src="@{/img/rating/star.png}">[[${res.getTotalScore}]]
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<th:block th:if="${orderByReviewInMonth.size() > 5}">
+				<div class="swiper-button-next main swiper-navBtn nb" id="nb2"></div>
+				<div class="swiper-button-prev main swiper-navBtn pb" id="pb2"></div>
+				<div class="swiper-pagination"></div>
+			</th:block>
+		</div>
+		<div class="swiper mySwiper">
+			<h2 class="cardTitle">[[${orderByResInMonthTitle}]]</h2>
+			<div class="slide-container swiper">
+				<hr>
+				<div class="slide-content" id="card3">
+					<div class="card-wrapper swiper-wrapper">
+						<div class="card swiper-slide move-card" th:each="res, iterStat: ${orderByResInMonth}" th:url="|@{/restaurant/}${res.getId}|">
+                        <div class="card-image">
+                              <div th:classappend="${iterStat.index < 3} ? 'rankWordContainer' : ''">
+                                  <span class="rankWord" th:text="${iterStat.index == 0 ? 'TOP1' : iterStat.index == 1 ? 'TOP2' : iterStat.index == 2 ? 'TOP3' : ''} "></span>
+                              </div>
+                           <img th:src="@{${res.photosImagePath}}" alt="" class="card-img">
+                        </div>   
+							<div class="card-content">
+								<div class="card-content2">
+									<span class="name" th:text="${res.getResName}" />
+								</div>
+								<br>
+								<span class="description1"
+									th:text="${res.getSi} + ' ' + ${res.getGun} + ' ' + ${res.getDong}" />
+								<span th:if="${res.getTotalScore >= 4}" class="resScore" style="color: orange;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 4 && 2 <= res.getTotalScore}" class="resScore"
+									style="color: black;">
+									평점 : <img th:src="@{/img/rating/star.png}"> [[${res.getTotalScore}]]
+								</span>
+								<span th:if="${res.getTotalScore < 2}" class="resScore" style="color: grey;">
+									평점 : <img th:src="@{/img/rating/star.png}">[[${res.getTotalScore}]]
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<th:block th:if="${orderByResInMonth.size() > 5}">
+				<div class="swiper-button-next main swiper-navBtn nb" id="nb3"></div>
+				<div class="swiper-button-prev main swiper-navBtn pb" id="pb3"></div>
+				<div class="swiper-pagination"></div>
+			</th:block>
+		</div>				
+	</div>
+	<div th:replace="fragments/footer	 :: WaEating_footer"></div>
+</body>
+<script th:src="@{./js/card.js}"></script>
+
+</html>

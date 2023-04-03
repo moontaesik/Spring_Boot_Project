@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Home - FOOD TABLE Admin</title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	
+	<script>
+		$(document).ready(function () {
+			$("#logoutLink").on("click", function (e) {
+				e.preventDefault();
+				document.logoutForm.submit();
+			});
+		});
+	</script>
+</head>
+<style>
+	.table {
+		width: 80%;
+		margin: 0 auto;
+	}
+
+	th {
+		font-size: 1.5pc;
+	}
+
+	td {
+		font-size: 1.1pc;
+		background-color: rgb(255, 180, 220);
+	}
+</style>
+<body>
+	<div class="container-fluid">
+		<div class="text-right">
+			<h3>[[${member.name}]]</h3>
+			<form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+				<input type="submit" />
+			</form>
+			<a th:href="@{/update}" class="btn btn-primary">회원 정보 수정</a>
+			<br>
+			<a id="logoutLink" href="">Logout</a>
+		</div>
+		<hr>
+		<h2 class="text-center">내 문의 조회</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>구분</th>
+					<th>질문</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="inquiry ,index: ${one}">
+					<tr th:faqindex="${index.index}" class="faq-header">
+						<td th:text="${inquiry.category.name}" class="left-td"></td>
+						<td class="right-td"><i class="fa-regular fa-circle-question"></i>[[${inquiry.title}]]
+							<span class="icon-right-span"><i class="fa-solid fa-caret-down"></i></span>
+						</td>
+					</tr>
+					<tr th:id="|content${index.index}|" class="faq-body">
+
+						<td class="col-2-td" th:attr="colspan=2">
+							<div class="faq-body-content">
+
+								<div class="faq-body-content-div"><i class="fa-solid fa-a"></i> <br>
+									<div th:utext="${inquiry.content}" class="faq-body-content-main"></div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	
+	[[${one}]]
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+</head>
+<script>
+
+</script>
+<style>
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+
+	#left {
+		background-color: palegreen;
+		width: 10%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 0;
+	}
+
+	#right {
+		background-color: lightgray;
+		width: 90%;
+		height: 90%;
+		position: fixed;
+		top: 10%;
+		left: 10%;
+	}
+</style>
+
+<body>
+
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+				<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+			
+			</ul>
+		</div>
+		<div class="test">
+
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+
+</body>
+
+</html>

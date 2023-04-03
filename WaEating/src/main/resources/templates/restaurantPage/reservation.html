@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+
+</head>
+<script>
+	$(document).ready(function () {
+
+		presentDate = $('#select-date').val();
+		presentTime = $('#select-time').val();
+
+		$('#page-time-td').text($('option:selected').text());
+		const arr = []
+
+		$.each($('.td-time'), function () {
+			if (!arr.includes('.' + this.className.replace('td-time ', ''))) {
+
+				arr.push('.' + this.className.replace('td-time ', ''));
+			}
+		})
+
+		$.each(arr, function (index1, value1) {
+
+			$.each($(value1), function (index, value) {
+
+				if (index == 0) {
+					$(value).attr("rowspan", $(value1).length);
+				} else {
+					$(value).remove();
+				}
+			})
+		})
+
+		$('#search-btn').click(function () {
+
+			date = $('#select-date').val();
+			time = $('#select-time').val();
+
+			window.location.href = '[[@{/restaurant-page/reservation?date=}]]' + date + '&time=' + time;
+		})
+
+		$('.page-link').click(function () {
+
+			window.location.href = '[[@{/restaurant-page/reservation?date=}]]' + presentDate + '&time=' + presentTime + '&page=' + $(this).attr("page");
+		})
+
+		$('#select-date').change(function () {
+
+			url = "[[@{/restaurant-page/reservation/times}]]";
+
+			params = {date: $(this).val()}
+
+			$.get(url, params, function (response) {
+				console.log(response);
+				$('#select-time').html('');
+				$('#select-time').append(createOptions({id: 0, time: "전체"}));
+				$.each(response, function () {
+					console.log(this);
+					$('#select-time').append(createOptions(this));
+				});
+
+			})
+		})
+
+		$('.btn-detail').click(function () {
+
+
+			url = "[[@{/restaurant-page/reservation/details}]]";
+
+			params = {id: $(this).attr("reservationid")}
+
+			$.get(url, params, function (response) {
+
+				$('#td-date').text(response.date)
+				$('#td-time').text(response.time)
+				$('#td-name').text(response.reservationName)
+				$('#td-phone').text(response.reservationPhone)
+				$('#td-people').text(response.people)
+				$('#td-price').text(response.totalAmount)
+				if (response.extraRequirement) {
+					$('#td-detail').text(response.extraRequirement)
+				} else {
+					$('#td-detail').text("요구사항이 없습니다.");
+				}
+				tableHTML = "<tbody><tr><td>메뉴명</td><td>개수</td><td>가격</td></tr>";
+
+
+				$.each(response.menus, function () {
+					tableHTML += "<tr><td>" + this.name + "</td><td>" + this.quantity + "</td><td>" + this.price * this.quantity + "</td></tr>";
+
+				})
+				tableHTML += "</tbody>"
+				$('#order-table-2').html(tableHTML);
+				console.log(response.menus);
+				$('#modalDialog').modal();
+
+			})
+		})
+
+
+		function createOptions(data) {
+			return $("<option>").val(data.id).text(data.time.replace(":00", ""));
+		}
+	})
+</script>
+<style>
+	#pagination {
+		display: flex;
+		margin: 0 auto;
+		justify-content: center;
+		padding: 7px;
+	}
+
+	.pagination {
+		align-items: center;
+	}
+
+	.page-item a {
+		font-weight: 500;
+		color: #000000a3;
+	}
+
+	.page-item.active .page-link {
+		border: 2px solid #574343;
+		background: white;
+		color: black;
+	}
+
+	.page-link:hover {
+		color: rgb(90, 85, 78);
+	}
+
+	#pagination .pagination .page-item li {
+		background-color: palegoldenrod;
+	}
+
+	.userComment {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: break-all;
+	}
+
+	.pagination li {
+		margin-right: 2px;
+	}
+
+	.pagination li:last-child {
+		margin-right: 0;
+	}
+
+	html,
+	body {
+		height: 100%;
+		clear: both;
+	}
+
+
+	#myTable {
+		background-color: #456423;
+		width: 80%;
+		margin: 0 auto 10px auto;
+		height: 80%;
+	}
+
+	#paging {
+		background-color: #acacac;
+		width: 80%;
+		margin: 0 auto;
+	}
+
+	#hed {
+		background-color: #cccccc;
+		width: 80%;
+		margin: 0 auto;
+	}
+
+	.d td {
+		border: solid 1px;
+	}
+
+	th {
+		background: #dee2e6;
+		;
+	}
+
+	#test-left {
+
+		width: 20%;
+	}
+
+	#test-right {
+
+		width: 80%;
+	}
+
+	.test {
+		display: flex;
+	}
+
+	#test-left-head {
+		padding: 12% 8%;
+		width: 85%;
+		height: 90%;
+		margin: 10% 3% 0 10%;
+		overflow-y: scroll;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+	}
+
+	input[name="date"] {
+		width: 24%;
+		margin: 0 10px;
+		border-radius: 5px;
+		text-align: center;
+		border: solid 1px;
+		padding: 0.17% 0;
+	}
+
+	select {
+		width: 8%;
+		margin: 0 10px;
+		padding: 0.5%;
+		text-align: center;
+		border-radius: 5px;
+
+	}
+
+
+	#test-right-head {
+
+
+		padding: 3% 2%;
+		width: 90%;
+		height: 90%;
+		margin: 2.5% 3% 0 2%;
+	}
+
+
+
+	#asd {
+		width: 100%;
+		text-align: center;
+		margin-top: 3%;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+	}
+
+	#asd tr td {
+		padding: 1%;
+	}
+
+	.td-time,
+	.td-date {
+		border: 1px solid;
+	}
+
+	.td-people,
+	.td-price,
+	.td-name,
+	.td-phone,
+	.td-detail {
+		border-top: 1px solid;
+		border-bottom: 1px solid;
+	}
+
+	.td-detail-see {
+		border-top: 1px solid;
+		border-bottom: 1px solid;
+		border-right: 1px solid;
+	}
+
+	#pagingIs {
+
+		width: 80%;
+		text-align: center;
+		margin: 10px auto 0;
+	}
+
+	#search-head-div {
+		width: 100%;
+		text-align: center;
+		display: flex;
+		justify-content: end;
+	}
+
+	#modalDialog .modal-dialog {
+		width: 1000px;
+		/* 모달창의 너비 설정 */
+		height: 750px;
+		/* 모달창의 높이 설정 */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	#order-details {
+
+		width: 330px;
+		height: 570px;
+		padding: 10px;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+	}
+
+	#order-menus {
+
+		width: 630px;
+		height: 570px;
+		margin-left: 10px;
+		padding: 10px;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+	}
+
+	.modal-content {
+		width: 1000px;
+		height: 750px;
+	}
+
+	#modalBody {
+		display: flex;
+		flex-direction: row;
+	}
+
+	.td-right {
+
+		width: 188px;
+		padding: 15px
+	}
+
+	.td-left {
+
+		text-align: center;
+		width: 120px;
+		padding: 15px;
+	}
+
+	tr {
+		border-bottom: solid 1px rgba(0, 0, 0, .1);
+		border-width: 90%;
+	}
+
+	.td-padding {
+		padding: 15px;
+	}
+
+	#order-table-2 tbody tr td {
+		padding: 15px
+	}
+
+	#totla-overview tbody tr td,
+	#total-menus tbody tr td {
+		padding: 15px
+	}
+
+	#pagination-container {
+		margin-top: 15px;
+		display: flex;
+		justify-content: center;
+	}
+
+	#no-data {
+
+		font-size: 20px;
+		font-weight: 700;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+
+			</ul>
+		</div>
+
+		<div class="test">
+
+
+			<div id="test-left">
+				<div id="test-left-head">
+
+					<table style="width: 100%;" id="totla-overview" class="table table-bordered text-center">
+						<tr>
+							<td>날짜 </td>
+							<td th:text="${date}"></td>
+						</tr>
+						<tr>
+							<td>시간 </td>
+							<td id="page-time-td"></td>
+						</tr>
+						<tr>
+							<td>매출 </td>
+							<td th:text="${totalPrice=='null 원'?'0 원':totalPrice}"></td>
+						</tr>
+					</table>
+
+					<table style="width: 100%;" id="total-menus">
+						<tr>
+							<td colspan="2" style="text-align: center;">주문서</td>
+						</tr>
+						<tr>
+							<td th:if="${orderSheet.isEmpty()}" colspan="2"
+								style="padding: 160px 15px; font-weight: 700;">주문 내역이 없습니다.</td>
+						</tr>
+						<tr th:each="menu:${orderSheet}">
+							<td th:text="${menu.name}">메뉴명</td>
+							<td th:text="${menu.quantity}">개수</td>
+						</tr>
+					</table>
+
+				</div>
+
+
+			</div>
+			<div id="test-right">
+				<div id="test-right-head">
+					<div id="search-head-div">
+						<input type="date" name="date" th:value="${date}" id="select-date" />
+						<select id="select-time"> // 여기 반복문
+
+							<option value="0" th:selected="${time==0?true:false}">전체 </option>
+							<option th:each="times:${timeList}" th:value="${times.id}"
+								th:selected="${time==times.id?true:false}" th:text="${times.time}">11:00</option>
+
+						</select><button id="search-btn" class="btn btn-light">검색</button>
+					</div>
+					<table id="asd" class="table table-bordered text-center">
+						<thead>
+							<tr>
+								<th id="1th">시간</th>
+								<th id="2th">인원</th>
+								<th id="3th">금액</th>
+								<th id="4th">예약자명</th>
+								<th id="5th">연락처</th>
+								<th id="6th">요청사항</th>
+								<th id="7th">상세정보</th>
+							</tr>
+						</thead>
+						<tbody th:if="${reservationInfo.reservationInfoList.isEmpty()}">
+							<tr>
+								<td colspan="7" id="no-data" style="padding: 23%;">예약내역이 없습니다</td>
+							</tr>
+						</tbody>
+						<tbody>
+
+							<!-- date 8 10 / time 4 8 10 -->
+
+							<tr th:each="reserInfo:${reservationInfo.reservationInfoList}">
+								<td th:class='${"td-time td-time-"+reserInfo.ids()}' th:text="${reserInfo.time}"></td>
+								<td class="td-people" th:text="${reserInfo.people}"></td>
+								<td class="td-price" th:text="${reserInfo.totalAmount}">75,000</td>
+								<td class="td-name" th:text="${reserInfo.reservationName}">이상민</td>
+								<td class="td-phone" th:text="${reserInfo.reservationPhone}">010-0000-0000</td>
+								<td class="td-detail" th:text="${reserInfo.extraRequirement==null?'X':'O'}">X</td>
+								<td class="td-detail-see"><button class="btn btn-light btn-detail "
+										th:reservationId="${reserInfo.reservationId}">상세보기</button>
+								</td>
+							</tr>
+
+
+						</tbody>
+					</table>
+
+					<nav aria-label="Page navigation example" id="pagination-container">
+						<ul class="pagination">
+							<li class="page-item" th:if="${reservationInfo.prevIsEnabled}"><a class="page-link"
+									th:page="${reservationInfo.pageList.get(0)-2}">Prev</a></li>
+							<li th:class="${page==reservationInfo.currentPage? 'page-item active':'page-item'}"
+								th:each="page: ${reservationInfo.pageList}"><a class="page-link" th:text="${page}"
+									th:page="${page-1}"></a></li>
+							<li class="page-item" th:if="${reservationInfo.nextIsEnabled}"><a class="page-link"
+									th:page="${reservationInfo.pageList.get(4)}">Next</a></li>
+						</ul>
+					</nav>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+
+	<div class="modal fade text-center" id="modalDialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="modalTitle">주문 상세정보</h4>
+					<button type="button" class="close btn" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body" style="display: flex;flex-direction: row;">
+					<span id="modalBody">
+
+
+						<div id="order-details">
+							<table>
+								<tr>
+									<td class="td-left">날짜</td>
+									<td class="td-right" id="td-date">2023-03-24</td>
+								</tr>
+								<tr>
+									<td class="td-left">시간</td>
+									<td class="td-right" id="td-time">10:00</td>
+								</tr>
+								<tr>
+									<td class="td-left">예약자명</td>
+									<td class="td-right" id="td-name">이상민</td>
+								</tr>
+								<tr>
+									<td class="td-left">연락처</td>
+									<td class="td-right" id="td-phone">010-0000-0000</td>
+								</tr>
+								<tr>
+									<td class="td-left">인원</td>
+									<td class="td-right" id="td-people">3명</td>
+								</tr>
+								<tr>
+									<td class="td-left">금액</td>
+									<td class="td-right" id="td-price">10,000원</td>
+								</tr>
+							</table>
+
+							<table style="width:100%" id="order-table">
+								<tr>
+									<td class="td-padding">
+										요구사항
+									</td>
+								</tr>
+								<tr>
+									<td id="td-detail" class="td-padding" style="height: 150px;">
+										오이 빼주세요.
+									</td>
+								</tr>
+							</table>
+
+
+
+
+						</div>
+						<div id="order-menus">
+							<div style="padding: 15px; width: 100%; margin:0 auto; font-size: 17px; font-weight: 700px; background: #dee2e6;">
+								주문서</div>
+							<table style="width:90%;margin:0 auto;" id="order-table-2">
+								<tr>
+									<td>메뉴명</td>
+									<td>개수</td>
+									<td>가격</td>
+								</tr>
+								<tr>
+									<td>제육볶음</td>
+									<td>1</td>
+									<td>7,000원</td>
+								</tr>
+							</table>
+
+						</div>
+
+					</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

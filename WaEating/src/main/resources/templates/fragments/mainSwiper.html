@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<html lang="en">
+<head th:fragment="mainSwiper_head">
+	<meta charset="utf-8" />
+	<title>Swiper demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+	<!-- Link Swiper's CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/mainSwiper.css}" />
+
+	<!-- Demo styles -->
+
+</head>
+
+<body th:fragment="mainSwiper_body">
+	<!-- Swiper -->
+	<div class="swiper ms" id="test">
+			<div class="swiper-wrapper ms">
+				<div class="swiper-slide ms" th:each="banner : ${bannerList}">
+					<img th:src="@{${banner.photosImagePath}}">
+				</div>
+			</div>
+		<div class="swiper-button-next" id="n"></div>
+		<div class="swiper-button-prev" id="p"></div>
+		<div class="swiper-pagination"></div>
+	</div>
+	<!-- Swiper JS -->
+	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+	<!-- Initialize Swiper -->
+	<script>
+		var swiper = new Swiper(".swiper", {
+			spaceBetween: 30,
+			centeredSlides: true,
+			autoplay: {
+				delay: 2500,
+				disableOnInteraction: false,
+			},
+			pagination: {
+				el: ".swiper-pagination",
+				clickable: true,
+			},
+			navigation: {
+				nextEl: "#n",
+				prevEl: "#p",
+			},
+		});
+
+	</script>
+</body>
+
+</html>

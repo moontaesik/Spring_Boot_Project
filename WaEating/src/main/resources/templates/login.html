@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html id="loginHtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header::WaEating_head" />
+<head th:replace="fragments/footer::WaEating_foot" />
+<head>
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Login</title>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+</head>
+
+<body id="#loginBody">
+	<div th:replace="fragments/header	 :: WaEating_header"></div>
+	<div class="wrapper">
+		<div class="title">
+			Login Form
+		</div>
+		<form th:action="@{/login}" method="post">
+			<div th:if="${param.error}">
+				<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+			</div>
+			<div th:if="${param.logout}">
+				<p class="text-danger">You have been logged out</p>
+			</div>
+			<div class="field">
+				<input type="text" name="userId" required>
+				<label>이름</label>
+			</div>
+			<div class="field">
+				<input type="password" name="password" required>
+				<label>비밀번호</label>
+			</div>
+			<div class="content">
+				<!--				<div class="checkbox">
+					<input type="checkbox" id="remember-me">
+					<label for="remember-me">Remember me</label>
+				</div>-->
+				<div class="pass-link">
+					<a th:href="@{/member/find/id}">아이디 찾기</a>
+					<a th:href="@{/member/find/pw}">비밀번호 찾기</a>
+				</div>
+			</div>
+			<div class="field">
+				<input type="submit" value="Login">
+				<br>
+				<a href="https://kauth.kakao.com/oauth/authorize?client_id=d966d9857b1f0f35c58d4b647af53590&redirect_uri=http://localhost:2232/FoodTable/member/auth/kakao/callback&response_type=code">
+					<img th:src="@{/img/kakao_btn.png}" style="width: 100%; border-radius: 25px; margin-top: 7px;">
+				</a>
+			</div>
+			<br><br>
+			<div class="signup-link">
+				회원이 아니십니까? <a th:href="@{/member/join}">회원가입</a>
+			</div>
+		</form>
+	</div>
+	<div th:replace="fragments/footer	 :: WaEating_footer"></div>
+</body>
+
+</html>

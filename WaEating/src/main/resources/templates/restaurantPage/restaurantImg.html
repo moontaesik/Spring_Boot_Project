@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<title>Reservation foodTable</title>
+
+	<head th:replace="fragments/header::WaEating_head" />
+
+	<head th:replace="fragments/footer::WaEating_foot" />
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<style>
+	#restaurantMenuList {}
+
+	#restaurantMenuListThumbnail {}
+
+	#edit {
+		display: flex;
+		justify-content: center !important;
+	}
+
+	#bannerContainer {
+		width: 50%;
+		margin: 2% auto;
+		overflow: scroll;
+	}
+
+	.table img {
+		height: 100%;
+		    width: 100%;
+	}
+
+	.btn-light {
+		color: #212529;
+		background-color: rgb(254 251 251);
+		border: 2px solid #d9d1dd !important;
+		width: 100%;
+		border-radius: 25px;
+		margin-top: 10px;
+	}
+
+	.btn-light:hover {
+		box-shadow:
+			inset 0 0 0 100px rgb(237, 231, 231);
+		opacity: 1;
+		transform: scale(1);
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+	<div class="sideWrapper">
+			<div class="sidebar">
+					<ul th:replace="fragments/side_restaurantpage::WaEating_sider_restaurantpage">
+			
+			</ul>
+			</div>
+		<div id="bannerContainer">
+			<div>
+				<table class="table table-bordered table-striped table-hover table-responsive-xl">
+					<thead class="thead-dark">
+						<th>현재 이미지</th>
+						<th>변경 이미지</th>
+					</thead>
+					<tbody>
+						<form th:action="@{/restaurant-page/restaurant/img/update}" method="post"
+							th:object="${restaurant}" enctype="multipart/form-data" onsubmit="return checkAddress(this)"
+							id="restaurantForm">
+							<td>
+								<div class="rimg">
+									<br>
+									<img id="thumbnail" th:src="@{${'/img/12.png'}}" th:if="${restaurant.img == null}"/>
+									<img id="thumbnail" th:src="@{${restaurant.photosImagePath()}}"
+										th:if="${restaurant.img != null}"  />
+									<br>
+								</div>
+							</td>
+							<td>
+								<div class="rimg">
+									<br>
+									<img id="thumbnail" th:src="@{${'/img/12.png'}}" th:if="${restaurant.img == null}"/>
+									<img id="thumbnail" th:src="@{${restaurant.photosImagePath()}}"
+										th:if="${restaurant.img != null}"  />
+									<br>
+									<input type="hidden" th:field="*{img}" />
+									<input type="file" style="margin-top: 10px;" class="form-control-file border"
+										name="file" id="file-upload" accept="image/png,image/jpeg">
+									<button class="btn btn-light" type="submit">확인</button>
+								</div>
+							</td>
+
+						</form>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>

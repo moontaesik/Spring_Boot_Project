@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head th:replace="fragments/header::WaEating_head" />
+
+<head th:replace="fragments/footer::WaEating_foot" />
+
+<head>
+	<link rel="stylesheet" th:href="@{/css/side.css}">
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<script>
+	$(document).ready(function () {
+		$('.move-tr').click(function () {
+			page = $(this).attr("page");
+			URL = "[[@{/mypage/inquiry/}]]" + page;
+			window.location.href = URL;
+		})
+	})
+</script>
+
+<style>
+	tr {
+		border-bottom: 1px solid;
+	}
+
+	table {
+		width: 90%;
+		margin: 0 auto;
+	}
+
+	td {
+		padding: 2%;
+	}
+
+	th {
+		padding: 1%;
+	}
+
+	thead {
+		text-align: center;
+	}
+
+	#view-count-span {
+		float: right;
+		margin-left: 10%;
+	}
+
+	#view-register-span {
+		float: right;
+	}
+
+	#sub-data-td {
+		background-color: #f8f8f8;
+	}
+
+	.text-span {
+		margin-right: 1%;
+	}
+
+	.left-right-p5-td {
+		padding: 2% 5%;
+	}
+
+	.left-m5-span {
+		margin-left: 5%;
+	}
+
+	#btn-goto-list {
+		border-radius: 3px;
+		width: 90%;
+		padding: 6%;
+		border-width: thin;
+		font-size: 82%;
+		font-weight: bold;
+		background-color: #414141;
+		color: white;
+		margin: 0 auto 10px auto;
+
+	}
+
+	#footer {
+		height: 20%;
+	}
+
+	#button-wrapper {
+		margin: 2% auto 0;
+		width: 12%;
+		overflow: auto;
+		display: flex;
+		justify-content: center;
+	}
+
+	#one-delete-btn {
+		background: none;
+		color: #00000094;
+		padding: 0.25%;
+		float: right;
+		width: 8%;
+		margin-right: 1%;
+		border-radius: 3px;
+		font-family: "paybooc-Light", sans-serif;
+		text-decoration: none;
+		font-weight: 600;
+		border: solid #f6cbcb 2px;
+	}
+
+	#one-delete-btn:hover {
+		background: #f6cbcb;
+		border: solid #f6cbcb 2px;
+	}
+</style>
+
+<body>
+	<div th:replace="fragments/header:: WaEating_header"></div>
+
+	<!--side-->
+	<div class="sideWrapper">
+		<div class="sidebar">
+			<ul th:replace="fragments/side_mypage:: WaEating_sider_mypage">
+
+			</ul>
+		</div>
+		<div class="test">
+			<div class="main_content">
+				<div class="main_content_header">
+					<h1>나의 문의</h1>
+				</div>
+				<hr>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<th th:text="${inquiry.get('current').title}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="sub-data-td">
+								<td>
+									<span style="float: left;"
+										th:text="|ID : ${inquiry.get('current').memberId}|"></span>
+									<span id="view-count-span" th:text="|상태 : ${inquiry.get('current').state}|"></span>
+									<span id="view-register-span"
+										th:text="|카테고리 : ${inquiry.get('current').categoryName}|"></span>
+								</td>
+							</tr>
+							<tr class="main-data-tr" style="border-bottom: none;">
+								<td class="main-data-td">
+									<div id="a" style="display: flex; justify-content: space-between;">
+										<div style="width: 50%;  padding: 40px 20px;">
+											<span id="myContenet"
+												th:utext="${inquiry.get('current').ContentWithEnter()}"></span>
+										</div>
+										<div style="width: 50%; box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.3); padding: 40px 20px;"
+											th:if="${inquiry.get('current').filePath != null}">
+											<img id="thumbnail" alt="Photos preview"
+												th:src="@{${inquiry.get('current').photosImagePath}}" class="img-fluid">
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr th:if="${comment != null}">
+								<td class="main-data-td">
+									<h4>관리자</h4><span th:utext="${comment.content}"></span>
+								</td>
+
+							</tr>
+							<tr th:if="${inquiry.get('current').state.toString()=='WAITING'}">
+								<td>
+									<form th:action="@{/mypage/inquiry/delete}" method="post">
+										<input type="hidden" name="oneToOneId"
+											th:value="${inquiry.get('current').id}" />
+										<input type="submit" value="삭제하기" id="one-delete-btn" />
+									</form>
+								</td>
+							</tr>
+							<tr th:page="${inquiry.get('next')!=null ?inquiry.get('next').id : 0}"
+								th:class="${inquiry.get('next')!=null ? 'move-tr' :'no-move-tr'}">
+								<td class="left-right-p5-td">
+									<span class="text-span">다음글</span><i class="fa-solid fa-angle-up"></i>
+									<span class="left-m5-span" th:text="${inquiry.get('next')!=null ? inquiry.get('next').title
+                                    : '다음 글이 없습니다.'}"></span>
+								</td>
+							</tr>
+							<tr th:page="${inquiry.get('previous')!=null ?inquiry.get('previous').id : 0}"
+								th:class="${inquiry.get('previous')!=null ? 'move-tr':'no-move-tr'   }">
+								<td class="left-right-p5-td">
+									<span class="text-span">이전글</span><i class="fa-solid fa-angle-down"></i>
+									<span class="left-m5-span" th:text="${inquiry.get('previous')!=null ? inquiry.get('previous').title
+                                    : '이전 글이 없습니다.'}"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div id="button-wrapper">
+						<button id="btn-goto-list" th:onclick="|window.location = '@{/mypage/inquiry}'|">목록</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:replace="fragments/footer:: WaEating_footer"></div>
+</body>
+
+</html>
